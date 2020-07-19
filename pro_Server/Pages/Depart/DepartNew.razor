@@ -32,14 +32,8 @@
     }
     private async Task Create()
     {
-        pro_Models.Models.Depart newDepart = new pro_Models.Models.Depart()
-        {
-            Id = DepartVM.Depart.Id,
-            Name = DepartVM.Depart.Name
-        };
-
-        DepartViewModel createdDepartViewModel;
-        createdDepartViewModel = await DepartService.CreateDepart(newDepart);
+        DepartVM.Exception = null;
+        DepartViewModel createdDepartViewModel = await DepartService.CreateDepart(DepartVM);
 
         if (string.IsNullOrEmpty(createdDepartViewModel.Exception))
         {

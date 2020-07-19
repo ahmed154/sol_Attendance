@@ -63,18 +63,15 @@ namespace pro_Server.Services
         }
 
 
-        public async Task<DepartViewModel> CreateDepart(Depart updatedDepart)
+        public async Task<DepartViewModel> CreateDepart(DepartViewModel departViewModel)
         {
-            DepartViewModel departViewModel = new DepartViewModel();
-            var dataJson = System.Text.Json.JsonSerializer.Serialize(updatedDepart);
+            var dataJson = System.Text.Json.JsonSerializer.Serialize(departViewModel);
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
             var responseHTTP = await httpClient.PostAsync(url, stringContent);
 
             if (responseHTTP.IsSuccessStatusCode)
             {
-                var response = await Deserialize<Depart>(responseHTTP, defaultJsonSerializerOptions);
-                departViewModel.Depart.Id = response.Id;
-                departViewModel.Depart.Name = response.Name;
+                departViewModel = await Deserialize<DepartViewModel>(responseHTTP, defaultJsonSerializerOptions);
             }
             else
             {
@@ -119,7 +116,7 @@ namespace pro_Server.Services
         public async Task<DepartViewModel> GetDepart(int id)
         {
             DepartViewModel departViewModel = new DepartViewModel();
-            var response = await httpService.Get<Depart>($"{url}/{id}");
+            var response = await httpService.Get<DepartViewModel>($"{url}/{id}");
 
             if (!response.Success)
             {
@@ -127,7 +124,7 @@ namespace pro_Server.Services
             }
             else
             {
-                departViewModel.Depart = response.Response;
+                departViewModel.Depart = response.Response.Depart;
             }
             return departViewModel;
         }

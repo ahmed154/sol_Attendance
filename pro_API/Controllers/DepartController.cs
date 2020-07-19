@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using pro_API.Repositories;
 using pro_Models.Models;
-
+using pro_Models.ViewModels;
 
 namespace pro_API.Controllers
 {
@@ -55,7 +55,7 @@ namespace pro_API.Controllers
             }
         }
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Depart>> GetDepart(int id)
+        public async Task<ActionResult<DepartViewModel>> GetDepart(int id)
         {
             try
             {
@@ -72,25 +72,24 @@ namespace pro_API.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult<Depart>> CreateDepart(Depart depart)
+        public async Task<ActionResult<Depart>> CreateDepart(DepartViewModel departViewModel)
         {
             try
             {
-                if (depart == null)
-                    return BadRequest();
+                if (departViewModel == null)return BadRequest();
 
                 // Add custom model validation error
-                Depart dep = await departRepository.GetDepartByname(depart);
+                Depart dep = await departRepository.GetDepartByname(departViewModel.Depart);
                 if (dep != null)
                 {
-                    ModelState.AddModelError("Name", $"Depart name: {depart.Name} already in use");
+                    ModelState.AddModelError("Name", $"Depart name: {departViewModel.Depart.Name} already in use");
                     return BadRequest(ModelState);
                 }
 
-                var createdDepart = await departRepository.AddDepart(depart);
+                departViewModel = await departRepository.AddDepart(departViewModel);
 
                 return CreatedAtAction(nameof(GetDepart),
-                    new { id = createdDepart.Id }, createdDepart);
+                    new { id = departViewModel.Depart.Id }, departViewModel);
             }
             catch (Exception)
             {

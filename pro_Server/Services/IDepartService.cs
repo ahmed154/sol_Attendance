@@ -12,7 +12,7 @@ namespace pro_Server.Services
         Task<IEnumerable<DepartViewModel>> GetDeparts();
         Task<DepartViewModel> GetDepart(int id);
         Task<DepartViewModel> UpdateDepart(int id, Depart updatedDepart);
-        Task<DepartViewModel> CreateDepart(Depart createdDepart);
+        Task<DepartViewModel> CreateDepart(DepartViewModel createdDepart);
         Task<DepartViewModel> DeleteDepart(int id);
     }
 }

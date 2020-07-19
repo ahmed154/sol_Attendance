@@ -11,7 +11,6 @@ namespace pro_Models.ViewModels
     {
         [ValidateComplexType]
         public Depart Depart { get; set; } = new Depart();
-        public bool ShowModal { get; set; }
         public string Exception { get; set; }
     }
 }

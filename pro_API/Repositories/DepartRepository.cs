@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using pro_API.Repositories;
 using pro_Models.Models;
+using pro_Models.ViewModels;
 
 namespace pro_API.Repositories
 {
@@ -30,18 +31,21 @@ namespace pro_API.Repositories
         }
         public async Task<IEnumerable<Depart>> GetDeparts()
         {
-            return await appDbContext.Departs.ToListAsync();
+            return await appDbContext.Departs.ToListAsync(); 
         }
-        public async Task<Depart> GetDepart(int departId)
+        public async Task<DepartViewModel> GetDepart(int departId)
         {
-            return await appDbContext.Departs
-                .FirstOrDefaultAsync(e => e.Id == departId);
+            DepartViewModel departViewModel = new DepartViewModel();
+            departViewModel.Depart = await appDbContext.Departs.FirstOrDefaultAsync(e => e.Id == departId);
+            return departViewModel;
         }
-        public async Task<Depart> AddDepart(Depart depart)
+        public async Task<DepartViewModel> AddDepart(DepartViewModel departViewModel)
         {
-            var result = await appDbContext.Departs.AddAsync(depart);
+            var result = await appDbContext.Departs.AddAsync(departViewModel.Depart);
             await appDbContext.SaveChangesAsync();
-            return result.Entity;
+
+            departViewModel.Depart = result.Entity;
+            return departViewModel;
         }
         public async Task<Depart> UpdateDepart(Depart depart)
         {
