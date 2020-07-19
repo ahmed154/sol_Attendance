@@ -33,17 +33,15 @@ namespace pro_Server.Services
         async Task<IEnumerable<DepartViewModel>> IDepartService.GetDeparts()
         {
             List<DepartViewModel> departViewModels = new List<DepartViewModel>();
-            var response = await httpService.Get<List<Depart>>(url);
+            var response = await httpService.Get<List<DepartViewModel>>(url);
+
             if (!response.Success)
             {
                 departViewModels.Add(new DepartViewModel { Exception = await response.GetBody() });
             }
             else
-            {
-                foreach (var item in response.Response)
-                {
-                    departViewModels.Add(new DepartViewModel{ Depart = item });
-                }
+            {     
+                 departViewModels = response.Response;              
             }
             return departViewModels;
         }
@@ -79,18 +77,16 @@ namespace pro_Server.Services
             }
             return departViewModel;
         }
-        public async Task<DepartViewModel> UpdateDepart(int id, Depart updatedDepart)
+        public async Task<DepartViewModel> UpdateDepart(int id, DepartViewModel departViewModel)
         {
-            DepartViewModel departViewModel = new DepartViewModel();
-            var dataJson = System.Text.Json.JsonSerializer.Serialize(updatedDepart);
+            var dataJson = System.Text.Json.JsonSerializer.Serialize(departViewModel);
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
             var responseHTTP = await httpClient.PutAsync($"{url}/{id}", stringContent);
 
             if (responseHTTP.IsSuccessStatusCode)
             {
-                var response = await Deserialize<Depart>(responseHTTP, defaultJsonSerializerOptions);
-                departViewModel.Depart.Id = response.Id;
-                departViewModel.Depart.Name = response.Name;
+                var response = await Deserialize<DepartViewModel>(responseHTTP, defaultJsonSerializerOptions);
+                departViewModel = response;
             }
             else
             {

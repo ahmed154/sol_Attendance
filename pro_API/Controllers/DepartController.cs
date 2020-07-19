@@ -22,7 +22,7 @@ namespace pro_API.Controllers
         }
 
         [HttpGet("{search}")]
-        public async Task<ActionResult<IEnumerable<Depart>>> Search(string name)
+        public async Task<ActionResult<IEnumerable<DepartViewModel>>> Search(string name)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace pro_API.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult<Depart>> CreateDepart(DepartViewModel departViewModel)
+        public async Task<ActionResult<DepartViewModel>> CreateDepart(DepartViewModel departViewModel)
         {
             try
             {
@@ -98,11 +98,11 @@ namespace pro_API.Controllers
             }
         }
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Depart>> UpdateDepart(int id, Depart depart)
+        public async Task<ActionResult<DepartViewModel>> UpdateDepart(int id, DepartViewModel departViewModel)
         {
             try
             {
-                if (id != depart.Id)
+                if (id != departViewModel.Depart.Id)
                     return BadRequest("Depart ID mismatch");
 
                 var departToUpdate = await departRepository.GetDepart(id);
@@ -111,14 +111,14 @@ namespace pro_API.Controllers
                     return NotFound($"Depart with Id = {id} not found");
 
                 // Add custom model validation error
-                Depart dep = await departRepository.GetDepartByname(depart);
+                Depart dep = await departRepository.GetDepartByname(departViewModel.Depart);
                 if (dep != null)
                 {
-                    ModelState.AddModelError("Name", $"Depart name: {depart.Name} already in use");
+                    ModelState.AddModelError("Name", $"Depart name: {departViewModel.Depart.Name} already in use");
                     return BadRequest(ModelState);
                 }
 
-                return await departRepository.UpdateDepart(depart);
+                return await departRepository.UpdateDepart(departViewModel);
             }
             catch (Exception)
             {
@@ -127,7 +127,7 @@ namespace pro_API.Controllers
             }
         }
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult<Depart>> DeleteDepart(int id)
+        public async Task<ActionResult<DepartViewModel>> DeleteDepart(int id)
         {
             try
             {

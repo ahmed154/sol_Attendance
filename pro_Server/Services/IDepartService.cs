@@ -11,8 +11,8 @@ namespace pro_Server.Services
     {
         Task<IEnumerable<DepartViewModel>> GetDeparts();
         Task<DepartViewModel> GetDepart(int id);
-        Task<DepartViewModel> UpdateDepart(int id, Depart updatedDepart);
-        Task<DepartViewModel> CreateDepart(DepartViewModel createdDepart);
+        Task<DepartViewModel> UpdateDepart(int id, DepartViewModel departViewModel);
+        Task<DepartViewModel> CreateDepart(DepartViewModel departViewModel);
         Task<DepartViewModel> DeleteDepart(int id);
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
-using Blazored.Toast;
 using BlazorServerApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -17,7 +16,6 @@ using pro_Server.Handlers;
 using pro_Server.Helpers;
 using pro_Server.Models;
 using pro_Server.Services;
-using Radzen;
 using Syncfusion.Blazor;
 
 namespace pro_Server
@@ -40,9 +38,6 @@ namespace pro_Server
             services.AddTransient<ValidateHeaderHandler>();
             services.AddBlazoredLocalStorage();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-            services.AddScoped<DialogService>();
-            services.AddScoped<NotificationService>();
-            services.AddBlazoredToast();
             services.AddSyncfusionBlazor();
 
             //services.AddHttpClient<IHttpService, HttpService>();

@@ -38,13 +38,8 @@
 
         private async Task Update()
         {
-            pro_Models.Models.Depart newDepart = new pro_Models.Models.Depart()
-            {
-                Id = DepartVM.Depart.Id,
-                Name = DepartVM.Depart.Name
-            };
-
-            DepartViewModel updatedDepartViewModel = await DepartService.UpdateDepart(newDepart.Id, newDepart);
+            DepartVM.Exception = null;
+            DepartViewModel updatedDepartViewModel = await DepartService.UpdateDepart(DepartVM.Depart.Id, DepartVM);
 
             if (string.IsNullOrEmpty(updatedDepartViewModel.Exception))
             {

@@ -7,12 +7,12 @@ namespace pro_API.Repositories
 {
     public interface IDepartRepository
     {
-        Task<IEnumerable<Depart>> Search(string name);
-        Task<IEnumerable<Depart>> GetDeparts();
+        Task<IEnumerable<DepartViewModel>> Search(string name);
+        Task<IEnumerable<DepartViewModel>> GetDeparts();
         Task<DepartViewModel> GetDepart(int departId);
         Task<DepartViewModel> AddDepart(DepartViewModel departViewModel);
-        Task<Depart> UpdateDepart(Depart depart);
-        Task<Depart> DeleteDepart(int departId);
+        Task<DepartViewModel> UpdateDepart(DepartViewModel depart);
+        Task<DepartViewModel> DeleteDepart(int departId);
         
         /////////////////////////////////////////////////////////// Other interface methods
         //Task<Depart> GetDepartByName(string name);

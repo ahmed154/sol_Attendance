@@ -18,8 +18,10 @@ namespace pro_API.Repositories
         {
             this.appDbContext = appDbContext;
         }
-        async Task<IEnumerable<Depart>> IDepartRepository.Search(string name)
+        async Task<IEnumerable<DepartViewModel>> IDepartRepository.Search(string name)
         {
+            List<DepartViewModel> departViewModels = new List<DepartViewModel>();
+
             IQueryable<Depart> query = appDbContext.Departs;
 
             if (!string.IsNullOrEmpty(name))
@@ -27,11 +29,23 @@ namespace pro_API.Repositories
                 query = query.Where(e => e.Name.Contains(name));
             }
 
-            return await query.ToListAsync();
+            var departs = await query.ToListAsync();
+
+            foreach (var depart in departs)
+            {
+                departViewModels.Add(new DepartViewModel { Depart = depart });
+            }
+            return departViewModels;
         }
-        public async Task<IEnumerable<Depart>> GetDeparts()
+        public async Task<IEnumerable<DepartViewModel>> GetDeparts()
         {
-            return await appDbContext.Departs.ToListAsync(); 
+            List<DepartViewModel> departViewModels = new List<DepartViewModel>();
+            var departs = await appDbContext.Departs.ToListAsync();
+            foreach (var depart in departs)
+            {
+                departViewModels.Add(new DepartViewModel { Depart = depart});
+            }
+            return departViewModels; 
         }
         public async Task<DepartViewModel> GetDepart(int departId)
         {
@@ -47,21 +61,21 @@ namespace pro_API.Repositories
             departViewModel.Depart = result.Entity;
             return departViewModel;
         }
-        public async Task<Depart> UpdateDepart(Depart depart)
+        public async Task<DepartViewModel> UpdateDepart(DepartViewModel departViewModel)
         {
             var result = await appDbContext.Departs
-                .FirstOrDefaultAsync(e => e.Id == depart.Id);
+                .FirstOrDefaultAsync(e => e.Id == departViewModel.Depart.Id);
 
             if (result != null)
             {
-                result.Name = depart.Name;
+                result.Name = departViewModel.Depart.Name;
                 await appDbContext.SaveChangesAsync();
-                return result;
+                return new DepartViewModel { Depart = result };
             }
 
             return null;
         }
-        public async Task<Depart> DeleteDepart(int departId)
+        public async Task<DepartViewModel> DeleteDepart(int departId)
         {
             var result = await appDbContext.Departs
                 .FirstOrDefaultAsync(e => e.Id == departId);
@@ -69,17 +83,14 @@ namespace pro_API.Repositories
             {
                 appDbContext.Departs.Remove(result);
                 await appDbContext.SaveChangesAsync();
-                return result;
+                return new DepartViewModel { Depart = result };
             }
 
             return null;
         }
-
-        //public async Task<Depart> GetDepartByName(string name)
-        //{
-        //    Depart mod = await appDbContext.Departs.FirstOrDefaultAsync(e => e.Name == name);
-        //    return mod;
-        //}
+/// <summary>
+/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// </summary>
         public async Task<Depart> GetDepartByname(Depart depart)
         {
             return await appDbContext.Departs.Where(n => n.Name == depart.Name && n.Id != depart.Id)
