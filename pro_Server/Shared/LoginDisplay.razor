@@ -1,0 +1,36 @@
+﻿@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <Authorized Context="user">
+        @*<a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+        <a href="/" @onclick="(() => Logout())">Logout</a>*@
+
+        @*<SFButtonDropdownMenu Email=@context.User.Identity.Name/>*@
+
+
+        <Dropdown>
+            <InitialTip><i class="far fa-user"></i>&ensp;@user.User.Identity.Name</InitialTip>
+        </Dropdown>
+
+
+    </Authorized>
+    <NotAuthorized Context="user">
+
+        <a href="/login" style="background-color:transparent; color:#343a40; font-size: 1.25rem;"> Log In</a> &ensp;
+        <a href="/signup" style="background-color:transparent; color:#343a40; font-size: 1.25rem;">Register</a>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+    bool ShowIdentity;
+    bool ShowAnynoms;
+
+    public async Task Logout()
+    {
+        await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
+        NavigationManager.NavigateTo("");
+    }
+
+}

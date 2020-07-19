@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pro_API", "pro_API\pro_API.csproj", "{A13098AA-ED8D-4DDE-8B8B-C0B25BCEA9CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pro_Server", "pro_Server\pro_Server.csproj", "{6860BAE3-F18F-48C8-BD5F-F46ABB6FE74B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pro_Models", "pro_Models\pro_Models.csproj", "{B1390D56-3885-465F-AE95-D23AC247A30A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A13098AA-ED8D-4DDE-8B8B-C0B25BCEA9CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A13098AA-ED8D-4DDE-8B8B-C0B25BCEA9CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A13098AA-ED8D-4DDE-8B8B-C0B25BCEA9CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A13098AA-ED8D-4DDE-8B8B-C0B25BCEA9CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6860BAE3-F18F-48C8-BD5F-F46ABB6FE74B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6860BAE3-F18F-48C8-BD5F-F46ABB6FE74B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6860BAE3-F18F-48C8-BD5F-F46ABB6FE74B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6860BAE3-F18F-48C8-BD5F-F46ABB6FE74B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1390D56-3885-465F-AE95-D23AC247A30A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1390D56-3885-465F-AE95-D23AC247A30A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1390D56-3885-465F-AE95-D23AC247A30A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1390D56-3885-465F-AE95-D23AC247A30A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E5018910-F660-4871-ACCE-9378940B1334}
+	EndGlobalSection
+EndGlobal
