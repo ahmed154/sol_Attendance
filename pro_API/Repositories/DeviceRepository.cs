@@ -7,16 +7,19 @@ using System.Threading.Tasks;
 using pro_API.Repositories;
 using pro_Models.Models;
 using pro_Models.ViewModels;
+using AutoMapper;
 
 namespace pro_API.Repositories
 {
     public class DeviceRepository : IDeviceRepository
     {
         private readonly AppDbContext appDbContext;
+        private readonly IMapper mapper;
 
-        public DeviceRepository(AppDbContext appDbContext)
+        public DeviceRepository(AppDbContext appDbContext, IMapper mapper)
         {
             this.appDbContext = appDbContext;
+            this.mapper = mapper;
         }
         async Task<IEnumerable<DeviceViewModel>> IDeviceRepository.Search(string name)
         {
@@ -63,12 +66,18 @@ namespace pro_API.Repositories
         }
         public async Task<DeviceViewModel> UpdateDevice(DeviceViewModel deviceViewModel)
         {
-            var result = await appDbContext.Devices
+            Device result = await appDbContext.Devices
                 .FirstOrDefaultAsync(e => e.Id == deviceViewModel.Device.Id);
 
             if (result != null)
             {
-                result.Name = deviceViewModel.Device.Name;
+                //result.Name = deviceViewModel.Device.Name;
+                //result.Number = deviceViewModel.Device.Number;
+                //result.Ip = deviceViewModel.Device.Ip;
+                //result.Port = deviceViewModel.Device.Port;
+
+                result = mapper.Map(deviceViewModel.Device, result);
+
                 await appDbContext.SaveChangesAsync();
                 return new DeviceViewModel { Device = result };
             }

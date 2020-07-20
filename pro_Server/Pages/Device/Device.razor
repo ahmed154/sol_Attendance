@@ -3,7 +3,7 @@
 <div class="container bg-white rounded border p-3">
     <div class="pl-3">
         <div class="row">
-            <span style="font-size:18px; color:#8f8f8f;">Devicements</span>
+            <span style="font-size:18px; color:#8f8f8f;">Devices</span>
         </div>
         <div class="row pt-4">
             <a class="btn btn-primary" href="/device/new" style="background-color:#6372C4"><i class="far fa-file"></i> New</a>
@@ -14,11 +14,11 @@
 <div class="container bg-white border box-shadow p-3 rounded">
     @if (DeviceVMs == null)
     {
-        <p>Loading ...</p>
+        <p style="color:gray;">Loading ...</p>
     }
     else if (DeviceVMs.Count() == 0)
     {
-        <p>No records to display.</p>
+        <p style="color:gray;">No records to display.</p>
     }
     else
     {

@@ -7,7 +7,7 @@
 
             <div class="row">
                 <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <SfTextBox id="name" Placeholder="Name" disabled="@IsDisabled" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@DepartVM.Depart.Name"></SfTextBox>
+                    <SfTextBox id="name" Placeholder="Name" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@DepartVM.Depart.Name"></SfTextBox>
                     <ValidationMessage For="@(() => DepartVM.Depart.Name)" />
                 </div>
             </div>
@@ -26,7 +26,7 @@
     [Parameter] public string Type { get; set; }
 
 
-    protected bool IsDisabled { get; set; } = false;
+    protected bool bol_ReadOnly { get; set; } = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -34,7 +34,7 @@
         {
             if (Type == "Details")
             {
-                IsDisabled = true;
+                bol_ReadOnly = true;
                 StateHasChanged();
             }
             else

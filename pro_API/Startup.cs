@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using pro_API.Data;
 using AutoMapper;
 using pro_API.Repositories;
+using pro_API.MapperProfiles;
 
 namespace pro_API
 {

@@ -6,10 +6,10 @@ using System.Text;
 
 namespace pro_Models.ViewModels
 {
-    public class DeviceViewModel
+    public class WorkSysViewModel
     {
         [ValidateComplexType]
-        public Device Device { get; set; } = new Device();
+        public WorkSys WorkSys { get; set; } = new WorkSys();
         public string Exception { get; set; }
     }
 }
