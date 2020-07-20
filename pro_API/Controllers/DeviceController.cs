@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using pro_API.Repositories;
 using pro_Models.Models;
-
+using pro_Models.ViewModels;
 
 namespace pro_API.Controllers
 {
@@ -22,7 +22,7 @@ namespace pro_API.Controllers
         }
 
         [HttpGet("{search}")]
-        public async Task<ActionResult<IEnumerable<Device>>> Search(string name)
+        public async Task<ActionResult<IEnumerable<DeviceViewModel>>> Search(string name)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace pro_API.Controllers
             }
         }
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Device>> GetDevice(int id)
+        public async Task<ActionResult<DeviceViewModel>> GetDevice(int id)
         {
             try
             {
@@ -72,26 +72,24 @@ namespace pro_API.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult<Device>> CreateDevice(Device device)
+        public async Task<ActionResult<DeviceViewModel>> CreateDevice(DeviceViewModel deviceViewModel)
         {
             try
             {
-                if (device == null)
-                    return BadRequest();
+                if (deviceViewModel == null)return BadRequest();
 
                 // Add custom model validation error
-                Device dep = await deviceRepository.GetDeviceByName(device.Name);
-
+                Device dep = await deviceRepository.GetDeviceByname(deviceViewModel.Device);
                 if (dep != null)
                 {
-                    ModelState.AddModelError("name", "Device name already in use");
+                    ModelState.AddModelError("Name", $"Device name: {deviceViewModel.Device.Name} already in use");
                     return BadRequest(ModelState);
                 }
 
-                var createdDevice = await deviceRepository.AddDevice(device);
+                deviceViewModel = await deviceRepository.AddDevice(deviceViewModel);
 
                 return CreatedAtAction(nameof(GetDevice),
-                    new { id = createdDevice.Id }, createdDevice);
+                    new { id = deviceViewModel.Device.Id }, deviceViewModel);
             }
             catch (Exception)
             {
@@ -100,11 +98,11 @@ namespace pro_API.Controllers
             }
         }
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Device>> UpdateDevice(int id, Device device)
+        public async Task<ActionResult<DeviceViewModel>> UpdateDevice(int id, DeviceViewModel deviceViewModel)
         {
             try
             {
-                if (id != device.Id)
+                if (id != deviceViewModel.Device.Id)
                     return BadRequest("Device ID mismatch");
 
                 var deviceToUpdate = await deviceRepository.GetDevice(id);
@@ -112,7 +110,15 @@ namespace pro_API.Controllers
                 if (deviceToUpdate == null)
                     return NotFound($"Device with Id = {id} not found");
 
-                return await deviceRepository.UpdateDevice(device);
+                // Add custom model validation error
+                Device dep = await deviceRepository.GetDeviceByname(deviceViewModel.Device);
+                if (dep != null)
+                {
+                    ModelState.AddModelError("Name", $"Device name: {deviceViewModel.Device.Name} already in use");
+                    return BadRequest(ModelState);
+                }
+
+                return await deviceRepository.UpdateDevice(deviceViewModel);
             }
             catch (Exception)
             {
@@ -121,7 +127,7 @@ namespace pro_API.Controllers
             }
         }
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult<Device>> DeleteDevice(int id)
+        public async Task<ActionResult<DeviceViewModel>> DeleteDevice(int id)
         {
             try
             {

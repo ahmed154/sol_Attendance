@@ -1,7 +1,54 @@
-﻿@page "/sec/details"
+﻿@page "/sec/{id:int}"
 
-<h3>SecDetails</h3>
+<div class="container bg-white rounded border p-3">
+    <div class="pl-3">
+        <div class="row">
+            <span style="font-size:18px; color:#8f8f8f;"><a href="/sec" style="color:#6372C4">Sections</a> /  @id</span>
+        </div>
+        <div class="row pt-4">
+            <a class="btn btn-primary" href="/sec/edit/@id" style="background-color:#6372C4"><i class="far fa-edit"></i> Edit</a>
+            <a class="btn border ml-1" href="/sec/new"><i class="far fa-file"></i> New</a>
+            <button class="btn border ml-5" @onclick="DeleteConfirm"><i class="far fa-trash-alt"></i> Delete</button>
+        </div>
+    </div>
+</div>
+
+<div class="container bg-white border box-shadow p-3 rounded">
+    <SecForm SecVM="SecVM" Type="Details" />
+</div>
+
 
 @code {
 
+    [Parameter] public int id { get; set; }
+    [Inject] public ISecService SecService { get; set; }
+    [Inject] public IJSRuntime JSRuntime { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    SecViewModel SecVM { get; set; } = new SecViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        SecVM = await SecService.GetSec(id);
+    }
+
+    protected async Task DeleteConfirm()
+    {
+        bool result = await JSRuntime.Confirm("Confirmation", $"Are you sure you want to delete Secment {SecVM.Sec.Name} ?", IJSRuntimeExtensionMethods.SweetAlertMessageType.question);
+        if (result) await Delete();
+    }
+    protected async Task Delete()
+    {
+        SecViewModel createdSecViewModel = await SecService.DeleteSec(SecVM.Sec.Id);
+
+        if (string.IsNullOrEmpty(createdSecViewModel.Exception))
+        {
+            await JSRuntime.Notfication($"Secment {SecVM.Sec.Name} has been deleted successfully!", IJSRuntimeExtensionMethods.SweetAlertMessageType.success, 3000);
+            NavigationManager.NavigateTo($"/sec");
+        }
+        else
+        {
+            await JSRuntime.Notfication(createdSecViewModel.Exception, IJSRuntimeExtensionMethods.SweetAlertMessageType.error, 10000);
+        }
+    }
 }

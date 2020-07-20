@@ -1,27 +1,27 @@
-﻿@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Inputs
 
-<EditForm Model="SecVM" Context="formContext">
-    <ObjectGraphDataAnnotationsValidator />
+    <EditForm Model="DeviceVM" Context="formContext">
+        <ObjectGraphDataAnnotationsValidator />
 
-    <div class="container border p-3">
+        <div class="container border p-3">
 
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                <SfTextBox id="name" Placeholder="Name" disabled="@IsDisabled" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@SecVM.Sec.Name"></SfTextBox>
-                <ValidationMessage For="@(() => SecVM.Sec.Name)" />
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                    <SfTextBox id="name" Placeholder="Name" disabled="@IsDisabled" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@DeviceVM.Device.Name"></SfTextBox>
+                    <ValidationMessage For="@(() => DeviceVM.Device.Name)" />
+                </div>
             </div>
+
+
         </div>
-
-
-    </div>
-    <button id="sub" class="btn btn-danger" type="submit" hidden @onclick=@(()=> Submit(formContext))>Submit</button>
-</EditForm>
+        <button id="sub" class="btn btn-danger" type="submit" hidden @onclick=@(()=> Submit(formContext))>Submit</button>
+    </EditForm>
 
 @code {
 
     [Inject] public IJSRuntime JSRuntime { get; set; }
-    [Parameter] public SecViewModel SecVM { get; set; } = new SecViewModel();
-    [Parameter] public EventCallback<SecViewModel> ecb_Save { get; set; }
+    [Parameter] public DeviceViewModel DeviceVM { get; set; } = new DeviceViewModel();
+    [Parameter] public EventCallback<DeviceViewModel> ecb_Save { get; set; }
 
     [Parameter] public string Type { get; set; }
 
@@ -52,7 +52,7 @@
     public async Task Submit(EditContext formContext)
     {
         if (!formContext.Validate()) return;
-        await ecb_Save.InvokeAsync(SecVM);
+        await ecb_Save.InvokeAsync(DeviceVM);
     }
 
 }

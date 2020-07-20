@@ -22,6 +22,7 @@ namespace pro_Server
 {
     public class Startup
     {
+        string uri = "https://localhost:44305/";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -53,10 +54,20 @@ namespace pro_Server
             {
                 client.BaseAddress = new Uri("https://localhost:44305/");
             }).AddHttpMessageHandler<ValidateHeaderHandler>();
+
             services.AddHttpClient<IDepartService, DepartService>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:44305/");
+                client.BaseAddress = new Uri(uri);
             });
+            services.AddHttpClient<ISecService, SecService>(client =>
+            {
+                client.BaseAddress = new Uri(uri);
+            });
+            services.AddHttpClient<IDeviceService, DeviceService>(client =>
+            {
+                client.BaseAddress = new Uri(uri);
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,7 +1,54 @@
-﻿@page "/sec/update"
+﻿@page "/sec/edit/{id:int}"
 
-<h3>SecUpdate</h3>
+<div class="container bg-white rounded border p-3">
+    <div class="pl-3">
+        <div class="row">
+            <span style="font-size:18px; color:#8f8f8f;"><a href="/sec" style="color:#6372C4">Sections</a>  /  @id</span>
+        </div>
+        <div class="row pt-4">
+            <button class="btn btn-primary" type="submit" @onclick=@(()=> Save()) style="background-color:#6372C4"><i class="far fa-save"></i> Save</button>
+            <a class="btn border ml-1" href="/sec/@id"><i class="fas fa-undo"></i> Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div class="container bg-white border box-shadow p-3 rounded">
+    <SecForm SecVM="SecVM" ecb_Save="Update" Type="Edit" @ref="Form" />
+</div>
 
 @code {
 
+    [Inject] public ISecService SecService { get; set; }
+    [Inject] public IJSRuntime JSRuntime { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+    [Parameter] public int id { get; set; }
+
+    SecViewModel SecVM { get; set; } = new SecViewModel();
+    protected SecForm Form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        SecVM = await SecService.GetSec(id);
+    }
+
+    private async Task Save()
+    {
+        await Form.ParentSubmit();
+    }
+
+    private async Task Update()
+    {
+        SecVM.Exception = null;
+        SecViewModel updatedSecViewModel = await SecService.UpdateSec(SecVM.Sec.Id, SecVM);
+
+        if (string.IsNullOrEmpty(updatedSecViewModel.Exception))
+        {
+            await JSRuntime.Notfication($"Secment {SecVM.Sec.Name} has been updated successfully!", IJSRuntimeExtensionMethods.SweetAlertMessageType.success, 3000);
+            NavigationManager.NavigateTo($"/sec/{updatedSecViewModel.Sec.Id}");
+        }
+        else
+        {
+            await JSRuntime.Notfication(updatedSecViewModel.Exception, IJSRuntimeExtensionMethods.SweetAlertMessageType.error, 10000);
+        }
+    }
 }

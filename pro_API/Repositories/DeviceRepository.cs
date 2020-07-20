@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using pro_API.Repositories;
 using pro_Models.Models;
+using pro_Models.ViewModels;
 
 namespace pro_API.Repositories
 {
@@ -17,8 +18,10 @@ namespace pro_API.Repositories
         {
             this.appDbContext = appDbContext;
         }
-        async Task<IEnumerable<Device>> IDeviceRepository.Search(string name)
+        async Task<IEnumerable<DeviceViewModel>> IDeviceRepository.Search(string name)
         {
+            List<DeviceViewModel> deviceViewModels = new List<DeviceViewModel>();
+
             IQueryable<Device> query = appDbContext.Devices;
 
             if (!string.IsNullOrEmpty(name))
@@ -26,44 +29,53 @@ namespace pro_API.Repositories
                 query = query.Where(e => e.Name.Contains(name));
             }
 
-            return await query.ToListAsync();
-        }
-        public async Task<IEnumerable<Device>> GetDevices()
-        {
-            return await appDbContext.Devices.ToListAsync();
-        }
+            var devices = await query.ToListAsync();
 
-        public async Task<Device> GetDevice(int deviceId)
-        {
-            return await appDbContext.Devices
-                .FirstOrDefaultAsync(e => e.Id == deviceId);
+            foreach (var device in devices)
+            {
+                deviceViewModels.Add(new DeviceViewModel { Device = device });
+            }
+            return deviceViewModels;
         }
-
-        public async Task<Device> AddDevice(Device device)
+        public async Task<IEnumerable<DeviceViewModel>> GetDevices()
         {
-            var result = await appDbContext.Devices.AddAsync(device);
+            List<DeviceViewModel> deviceViewModels = new List<DeviceViewModel>();
+            var devices = await appDbContext.Devices.ToListAsync();
+            foreach (var device in devices)
+            {
+                deviceViewModels.Add(new DeviceViewModel { Device = device});
+            }
+            return deviceViewModels; 
+        }
+        public async Task<DeviceViewModel> GetDevice(int deviceId)
+        {
+            DeviceViewModel deviceViewModel = new DeviceViewModel();
+            deviceViewModel.Device = await appDbContext.Devices.FirstOrDefaultAsync(e => e.Id == deviceId);
+            return deviceViewModel;
+        }
+        public async Task<DeviceViewModel> AddDevice(DeviceViewModel deviceViewModel)
+        {
+            var result = await appDbContext.Devices.AddAsync(deviceViewModel.Device);
             await appDbContext.SaveChangesAsync();
-            return result.Entity;
-        }
 
-        public async Task<Device> UpdateDevice(Device device)
+            deviceViewModel.Device = result.Entity;
+            return deviceViewModel;
+        }
+        public async Task<DeviceViewModel> UpdateDevice(DeviceViewModel deviceViewModel)
         {
             var result = await appDbContext.Devices
-                .FirstOrDefaultAsync(e => e.Id == device.Id);
+                .FirstOrDefaultAsync(e => e.Id == deviceViewModel.Device.Id);
 
             if (result != null)
             {
-                result.Name = device.Name;
-
+                result.Name = deviceViewModel.Device.Name;
                 await appDbContext.SaveChangesAsync();
-
-                return result;
+                return new DeviceViewModel { Device = result };
             }
 
             return null;
         }
-
-        public async Task<Device> DeleteDevice(int deviceId)
+        public async Task<DeviceViewModel> DeleteDevice(int deviceId)
         {
             var result = await appDbContext.Devices
                 .FirstOrDefaultAsync(e => e.Id == deviceId);
@@ -71,16 +83,18 @@ namespace pro_API.Repositories
             {
                 appDbContext.Devices.Remove(result);
                 await appDbContext.SaveChangesAsync();
-                return result;
+                return new DeviceViewModel { Device = result };
             }
 
             return null;
         }
-
-        public async Task<Device> GetDeviceByName(string name)
+/// <summary>
+/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// </summary>
+        public async Task<Device> GetDeviceByname(Device device)
         {
-            Device mod = await appDbContext.Devices.FirstOrDefaultAsync(e => e.Name == name);
-            return mod;
+            return await appDbContext.Devices.Where(n => n.Name == device.Name && n.Id != device.Id)
+                .FirstOrDefaultAsync();
         }
     }
 }

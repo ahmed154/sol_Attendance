@@ -1,7 +1,65 @@
 ﻿@page "/sec"
 
-<h3>SecIndex</h3>
+<div class="container bg-white rounded border p-3">
+    <div class="pl-3">
+        <div class="row">
+            <span style="font-size:18px; color:#8f8f8f;">Sections</span>
+        </div>
+        <div class="row pt-4">
+            <a class="btn btn-primary" href="/sec/new" style="background-color:#6372C4"><i class="far fa-file"></i> New</a>
+        </div>
+    </div>
+</div>
 
-@code {
+<div class="container bg-white border box-shadow p-3 rounded">
+    @if (SecVMs == null)
+    {
+        <p>Loading ...</p>
+    }
+    else if (SecVMs.Count() == 0)
+    {
+        <p>No records to display.</p>
+    }
+    else
+    {
+        <SfGrid DataSource="@SecVMs" AllowPaging="true" AllowSorting="true">
+            <GridEvents RowSelected="RowSelectHandler" TValue="SecViewModel"></GridEvents>
+            <GridPageSettings PageSize="10" />
+            <GridColumns>
+                <GridColumn Field="Sec.Id" HeaderText="ID" Width="50" />
+                <GridColumn Field="Sec.Name" HeaderText="Name" Width="200" />
+            </GridColumns>
+        </SfGrid>
+    }
+</div>
 
+
+@code
+{
+    [Inject] public ISecService SecService { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    public List<SecViewModel> SecVMs { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SecVMs = (await SecService.GetSecs()).OrderByDescending(x => x.Sec.Id).ToList();
+    }
+
+    public void RowSelectHandler(RowSelectEventArgs<SecViewModel> args)
+    {
+        NavigationManager.NavigateTo($"sec/{args.Data.Sec.Id}");
+    }
 }
+
+
+<style>
+    .e-grid .e-headercelldiv {
+        background-color: #F2F3F4;
+        font-size: 16px;
+    }
+
+    .e-grid .e-rowcell {
+        font-size: 14px;
+    }
+</style>

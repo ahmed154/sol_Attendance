@@ -1,7 +1,50 @@
 ﻿@page "/sec/new"
 
-<h3>SecNew</h3>
+<div class="container bg-white rounded border p-3">
+    <div class="pl-3">
+        <div class="row">
+            <span style="font-size:18px; color:#8f8f8f;"><a href="/sec" style="color:#6372C4">Sections</a> /  New</span>
+        </div>
+        <div class="row pt-4">
+            <button class="btn btn-primary" type="submit" @onclick=@(()=> Save()) style="background-color:#6372C4"><i class="far fa-save"></i> Save</button>
+            <a class="btn border ml-1" href="/sec"><i class="fas fa-undo"></i> Cancel</a>
+        </div>
+    </div>
+</div>
 
-@code {
+<div class="container bg-white border box-shadow p-3 rounded">
+    <SecForm SecVM="SecVM" ecb_Save="Create" Type="New" @ref="Form" />
+</div>
 
+
+@code
+{
+    [Inject] public ISecService SecService { get; set; }
+    [Inject] public IJSRuntime JSRuntime { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    protected SecForm Form;
+    SecViewModel SecVM { get; set; } = new SecViewModel();
+
+    private async Task Save()
+    {
+        await Form.ParentSubmit();
+    }
+    private async Task Create()
+    {
+        SecVM.Exception = null;
+        SecViewModel createdSecViewModel = await SecService.CreateSec(SecVM);
+
+        if (string.IsNullOrEmpty(createdSecViewModel.Exception))
+        {
+            await JSRuntime.Notfication($"Secment {SecVM.Sec.Name} has been created successfully!", IJSRuntimeExtensionMethods.SweetAlertMessageType.success, 3000);
+            NavigationManager.NavigateTo($"/sec/{createdSecViewModel.Sec.Id}");
+        }
+        else
+        {
+            await JSRuntime.Notfication(createdSecViewModel.Exception, IJSRuntimeExtensionMethods.SweetAlertMessageType.error, 10000);
+        }
+    }
 }
+
+

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using pro_API.Repositories;
 using pro_Models.Models;
+using pro_Models.ViewModels;
 
 namespace pro_API.Repositories
 {
@@ -17,8 +18,10 @@ namespace pro_API.Repositories
         {
             this.appDbContext = appDbContext;
         }
-        async Task<IEnumerable<Sec>> ISecRepository.Search(string name)
+        async Task<IEnumerable<SecViewModel>> ISecRepository.Search(string name)
         {
+            List<SecViewModel> secViewModels = new List<SecViewModel>();
+
             IQueryable<Sec> query = appDbContext.Secs;
 
             if (!string.IsNullOrEmpty(name))
@@ -26,44 +29,53 @@ namespace pro_API.Repositories
                 query = query.Where(e => e.Name.Contains(name));
             }
 
-            return await query.ToListAsync();
-        }
-        public async Task<IEnumerable<Sec>> GetSecs()
-        {
-            return await appDbContext.Secs.ToListAsync();
-        }
+            var secs = await query.ToListAsync();
 
-        public async Task<Sec> GetSec(int secId)
-        {
-            return await appDbContext.Secs
-                .FirstOrDefaultAsync(e => e.Id == secId);
+            foreach (var sec in secs)
+            {
+                secViewModels.Add(new SecViewModel { Sec = sec });
+            }
+            return secViewModels;
         }
-
-        public async Task<Sec> AddSec(Sec sec)
+        public async Task<IEnumerable<SecViewModel>> GetSecs()
         {
-            var result = await appDbContext.Secs.AddAsync(sec);
+            List<SecViewModel> secViewModels = new List<SecViewModel>();
+            var secs = await appDbContext.Secs.ToListAsync();
+            foreach (var sec in secs)
+            {
+                secViewModels.Add(new SecViewModel { Sec = sec});
+            }
+            return secViewModels; 
+        }
+        public async Task<SecViewModel> GetSec(int secId)
+        {
+            SecViewModel secViewModel = new SecViewModel();
+            secViewModel.Sec = await appDbContext.Secs.FirstOrDefaultAsync(e => e.Id == secId);
+            return secViewModel;
+        }
+        public async Task<SecViewModel> AddSec(SecViewModel secViewModel)
+        {
+            var result = await appDbContext.Secs.AddAsync(secViewModel.Sec);
             await appDbContext.SaveChangesAsync();
-            return result.Entity;
-        }
 
-        public async Task<Sec> UpdateSec(Sec sec)
+            secViewModel.Sec = result.Entity;
+            return secViewModel;
+        }
+        public async Task<SecViewModel> UpdateSec(SecViewModel secViewModel)
         {
             var result = await appDbContext.Secs
-                .FirstOrDefaultAsync(e => e.Id == sec.Id);
+                .FirstOrDefaultAsync(e => e.Id == secViewModel.Sec.Id);
 
             if (result != null)
             {
-                result.Name = sec.Name;
-
+                result.Name = secViewModel.Sec.Name;
                 await appDbContext.SaveChangesAsync();
-
-                return result;
+                return new SecViewModel { Sec = result };
             }
 
             return null;
         }
-
-        public async Task<Sec> DeleteSec(int secId)
+        public async Task<SecViewModel> DeleteSec(int secId)
         {
             var result = await appDbContext.Secs
                 .FirstOrDefaultAsync(e => e.Id == secId);
@@ -71,16 +83,18 @@ namespace pro_API.Repositories
             {
                 appDbContext.Secs.Remove(result);
                 await appDbContext.SaveChangesAsync();
-                return result;
+                return new SecViewModel { Sec = result };
             }
 
             return null;
         }
-
-        public async Task<Sec> GetSecByName(string name)
+/// <summary>
+/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// </summary>
+        public async Task<Sec> GetSecByname(Sec sec)
         {
-            Sec mod = await appDbContext.Secs.FirstOrDefaultAsync(e => e.Name == name);
-            return mod;
+            return await appDbContext.Secs.Where(n => n.Name == sec.Name && n.Id != sec.Id)
+                .FirstOrDefaultAsync();
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using pro_API.Repositories;
 using pro_Models.Models;
-
+using pro_Models.ViewModels;
 
 namespace pro_API.Controllers
 {
@@ -22,7 +22,7 @@ namespace pro_API.Controllers
         }
 
         [HttpGet("{search}")]
-        public async Task<ActionResult<IEnumerable<Sec>>> Search(string name)
+        public async Task<ActionResult<IEnumerable<SecViewModel>>> Search(string name)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace pro_API.Controllers
             }
         }
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Sec>> GetSec(int id)
+        public async Task<ActionResult<SecViewModel>> GetSec(int id)
         {
             try
             {
@@ -72,26 +72,24 @@ namespace pro_API.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult<Sec>> CreateSec(Sec sec)
+        public async Task<ActionResult<SecViewModel>> CreateSec(SecViewModel secViewModel)
         {
             try
             {
-                if (sec == null)
-                    return BadRequest();
+                if (secViewModel == null)return BadRequest();
 
                 // Add custom model validation error
-                Sec dep = await secRepository.GetSecByName(sec.Name);
-
+                Sec dep = await secRepository.GetSecByname(secViewModel.Sec);
                 if (dep != null)
                 {
-                    ModelState.AddModelError("name", "Sec name already in use");
+                    ModelState.AddModelError("Name", $"Sec name: {secViewModel.Sec.Name} already in use");
                     return BadRequest(ModelState);
                 }
 
-                var createdSec = await secRepository.AddSec(sec);
+                secViewModel = await secRepository.AddSec(secViewModel);
 
                 return CreatedAtAction(nameof(GetSec),
-                    new { id = createdSec.Id }, createdSec);
+                    new { id = secViewModel.Sec.Id }, secViewModel);
             }
             catch (Exception)
             {
@@ -100,11 +98,11 @@ namespace pro_API.Controllers
             }
         }
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Sec>> UpdateSec(int id, Sec sec)
+        public async Task<ActionResult<SecViewModel>> UpdateSec(int id, SecViewModel secViewModel)
         {
             try
             {
-                if (id != sec.Id)
+                if (id != secViewModel.Sec.Id)
                     return BadRequest("Sec ID mismatch");
 
                 var secToUpdate = await secRepository.GetSec(id);
@@ -112,7 +110,15 @@ namespace pro_API.Controllers
                 if (secToUpdate == null)
                     return NotFound($"Sec with Id = {id} not found");
 
-                return await secRepository.UpdateSec(sec);
+                // Add custom model validation error
+                Sec dep = await secRepository.GetSecByname(secViewModel.Sec);
+                if (dep != null)
+                {
+                    ModelState.AddModelError("Name", $"Sec name: {secViewModel.Sec.Name} already in use");
+                    return BadRequest(ModelState);
+                }
+
+                return await secRepository.UpdateSec(secViewModel);
             }
             catch (Exception)
             {
@@ -121,7 +127,7 @@ namespace pro_API.Controllers
             }
         }
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult<Sec>> DeleteSec(int id)
+        public async Task<ActionResult<SecViewModel>> DeleteSec(int id)
         {
             try
             {

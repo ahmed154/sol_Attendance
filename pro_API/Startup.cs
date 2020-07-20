@@ -58,7 +58,6 @@ namespace pro_API
             services.AddScoped<IDepartRepository, DepartRepository>();
             services.AddScoped<ISecRepository, SecRepository>();
             services.AddScoped<IDeviceRepository, DeviceRepository>();
-            services.AddScoped<IEmpRepository, EmpRepository>();
 
         }
 
