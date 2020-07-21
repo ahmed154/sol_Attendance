@@ -1,0 +1,61 @@
+﻿@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+
+    <div class="w3-container w3-center @DaysAnimateClass">
+
+        <div class="checkbox-control mt-2">
+            <div class="row">
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.saType" Label="Non Fixed &ensp;&ensp;"></SfCheckBox>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.sah" Label="Holiday"></SfCheckBox>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.saBonus" Label="Bonus"></SfCheckBox>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+                <SfCheckBox @bind-Checked="@WorksysVM.Worksys.saf" Label="First Shift &ensp;&ensp;"></SfCheckBox>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <SfTimePicker TValue="DateTime?" Placeholder="Select a time"></SfTimePicker>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <SfTimePicker TValue="DateTime?" Placeholder="Select a time"></SfTimePicker>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <SfTimePicker TValue="DateTime?" Placeholder="Select a time"></SfTimePicker>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+                <SfCheckBox @bind-Checked="@WorksysVM.Worksys.sas" Label="Second Shift"></SfCheckBox>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <SfTimePicker TValue="DateTime?" Placeholder="Select a time"></SfTimePicker>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <SfTimePicker TValue="DateTime?" Placeholder="Select a time"></SfTimePicker>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <SfTimePicker TValue="DateTime?" Placeholder="Select a time"></SfTimePicker>
+            </div>
+        </div>
+    </div>
+
+@code {
+
+    [Parameter] public WorksysViewModel WorksysVM { get; set; } = new WorksysViewModel();
+    [Parameter] public string DaysAnimateClass { get; set; }
+
+}

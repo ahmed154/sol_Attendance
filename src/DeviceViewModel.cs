@@ -1,4 +1,4 @@
-using pro_Models.Models;
+﻿using pro_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,10 +6,10 @@ using System.Text;
 
 namespace pro_Models.ViewModels
 {
-    public class WorksysViewModel
+    public class DeviceViewModel
     {
         [ValidateComplexType]
-        public Worksys Worksys { get; set; } = new Worksys();
+        public Device Device { get; set; } = new Device();
         public string Exception { get; set; }
     }
 }

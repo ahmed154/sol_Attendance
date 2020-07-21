@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace pro_Models.Models
 {
-    public class WorkSys
+    public class Worksys
     {
         public int Id { get; set; }
         [Required]
@@ -28,7 +28,7 @@ namespace pro_Models.Models
         public bool sah { get; set; } = false;
         public bool saBonus { get; set; } = false;
         public bool saf { get; set; } = true;
-        public DateTime safs { get; set; }
+        public DateTime? safs { get; set; } = DateTime.Now;
         public DateTime safe { get; set; }
         public DateTime safa { get; set; }
         public bool sas { get; set; } = false;

@@ -1,0 +1,65 @@
+@page "/worksys"
+
+<div class="container bg-white rounded border p-3">
+    <div class="pl-3">
+        <div class="row">
+            <span style="font-size:18px; color:#8f8f8f;">Worksyss</span>
+        </div>
+        <div class="row pt-4">
+            <a class="btn btn-primary" href="/worksys/new" style="background-color:#6372C4"><i class="far fa-file"></i> New</a>
+        </div>
+    </div>
+</div>
+
+<div class="container bg-white border box-shadow p-3 rounded">
+    @if (WorksysVMs == null)
+    {
+        <p style="color:gray;">Loading ...</p>
+    }
+    else if (WorksysVMs.Count() == 0)
+    {
+        <p style="color:gray;">No records to display.</p>
+    }
+    else
+    {
+        <SfGrid DataSource="@WorksysVMs" AllowPaging="true" AllowSorting="true">
+            <GridEvents RowSelected="RowSelectHandler" TValue="WorksysViewModel"></GridEvents>
+            <GridPageSettings PageSize="10" />
+            <GridColumns>
+                <GridColumn Field="Worksys.Id" HeaderText="ID" Width="50" />
+                <GridColumn Field="Worksys.Name" HeaderText="Name" Width="200" />
+            </GridColumns>
+        </SfGrid>
+    }
+</div>
+
+
+@code 
+{
+    [Inject] public IWorksysService WorksysService { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    public List<WorksysViewModel> WorksysVMs { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        WorksysVMs = (await WorksysService.GetWorksyss()).OrderByDescending(x => x.Worksys.Id).ToList();
+    }
+
+    public void RowSelectHandler(RowSelectEventArgs<WorksysViewModel> args)
+    {
+        NavigationManager.NavigateTo($"worksys/{args.Data.Worksys.Id}");
+    }
+}
+
+
+ <style>
+            .e-grid .e-headercelldiv {
+                background-color: #F2F3F4;
+                font-size: 16px;
+            }
+
+            .e-grid .e-rowcell {
+                font-size: 14px;
+            }
+ </style>

@@ -15,7 +15,7 @@ namespace pro_API.MapperProfiles
             CreateMap<Depart, Depart>();
             CreateMap<Sec, Sec>();
             CreateMap<Device, Device>();
-            CreateMap<WorkSys, WorkSys>();
+            CreateMap<Worksys, Worksys>();
         }
     }
 }

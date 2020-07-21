@@ -1,0 +1,65 @@
+@page "/device"
+
+<div class="container bg-white rounded border p-3">
+    <div class="pl-3">
+        <div class="row">
+            <span style="font-size:18px; color:#8f8f8f;">Devices</span>
+        </div>
+        <div class="row pt-4">
+            <a class="btn btn-primary" href="/device/new" style="background-color:#6372C4"><i class="far fa-file"></i> New</a>
+        </div>
+    </div>
+</div>
+
+<div class="container bg-white border box-shadow p-3 rounded">
+    @if (DeviceVMs == null)
+    {
+        <p style="color:gray;">Loading ...</p>
+    }
+    else if (DeviceVMs.Count() == 0)
+    {
+        <p style="color:gray;">No records to display.</p>
+    }
+    else
+    {
+        <SfGrid DataSource="@DeviceVMs" AllowPaging="true" AllowSorting="true">
+            <GridEvents RowSelected="RowSelectHandler" TValue="DeviceViewModel"></GridEvents>
+            <GridPageSettings PageSize="10" />
+            <GridColumns>
+                <GridColumn Field="Device.Id" HeaderText="ID" Width="50" />
+                <GridColumn Field="Device.Name" HeaderText="Name" Width="200" />
+            </GridColumns>
+        </SfGrid>
+    }
+</div>
+
+
+@code 
+{
+    [Inject] public IDeviceService DeviceService { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    public List<DeviceViewModel> DeviceVMs { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        DeviceVMs = (await DeviceService.GetDevices()).OrderByDescending(x => x.Device.Id).ToList();
+    }
+
+    public void RowSelectHandler(RowSelectEventArgs<DeviceViewModel> args)
+    {
+        NavigationManager.NavigateTo($"device/{args.Data.Device.Id}");
+    }
+}
+
+
+ <style>
+            .e-grid .e-headercelldiv {
+                background-color: #F2F3F4;
+                font-size: 16px;
+            }
+
+            .e-grid .e-rowcell {
+                font-size: 14px;
+            }
+ </style>

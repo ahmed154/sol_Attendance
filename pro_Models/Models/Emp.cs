@@ -20,7 +20,7 @@ namespace pro_Models.Models
         public int SecId { get; set; }
         //////////////////////////////////Relation
         public Device Device { get; set; }
-        public WorkSys WorkSys { get; set; }
+        public Worksys WorkSys { get; set; }
         public Depart Depart { get; set; }
         public Sec Sec { get; set; }
     }

@@ -67,6 +67,10 @@ namespace pro_Server
             {
                 client.BaseAddress = new Uri(uri);
             });
+            services.AddHttpClient<IWorksysService, WorksysService>(client =>
+            {
+                client.BaseAddress = new Uri(uri);
+            });
 
         }
 
