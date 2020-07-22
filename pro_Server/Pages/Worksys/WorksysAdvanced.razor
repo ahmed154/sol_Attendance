@@ -1,34 +1,125 @@
-﻿@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Calendars
+﻿@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Buttons
 
-    <div class="container border p-5 mt-2">
-        <div class="row">
-            <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-1">
-                <lable style="color:#6372C4">From</lable>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                <SfTimePicker TValue="DateTime?" @bind-Value="@End" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
-            </div>
-            <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-2">
-                <lable style="color:#6372C4">To</lable>
-            </div>
+
+<div class="container border p-5 mt-2">
+    <div class="row">
+        <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4 mt-1">
+            <span style="color:#6372C4">Last time for leaving in the next day</span>
         </div>
-        <div class="row">
-            <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-1">
-                <lable style="color:#6372C4">From</lable>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                <SfTimePicker TValue="DateTime?" @bind-Value="@End" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
-            </div>
-            <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-2">
-                <lable style="color:#6372C4">To</lable>
-            </div>
+        <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+            <SfTimePicker TValue="DateTime?"
+                          @bind-Value="@WorksysVM.Worksys.End"
+                          Readonly="bol_ReadOnly"
+                          Max=@(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15, 23, 00, 00))
+                          Placeholder="Select a time"
+                          >
+            </SfTimePicker>
         </div>
     </div>
 
+    <div class="row">
+        <InputNumber readonly hidden @bind-Value="@WorksysVM.Worksys.Day_Hours"></InputNumber>
+        <InputNumber readonly hidden @bind-Value="@WorksysVM.Worksys.Day_Min"></InputNumber>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-6">
+            <SfCheckBox @bind-Checked="@WorksysVM.Worksys.BonusCheck" Disabled="bol_ReadOnly" CssClass="e-custom" Label="Overtime is included in the total added"></SfCheckBox>
+        </div>
+        <div class="col-6">
+            <SfCheckBox @bind-Checked="@WorksysVM.Worksys.LateCheck" Disabled="bol_ReadOnly" CssClass="e-custom" Label="The delay is within the cut-off total"></SfCheckBox>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-6">
+            <SfCheckBox @bind-Checked="@WorksysVM.Worksys.AttEarly" Disabled="bol_ReadOnly" CssClass="e-custom" Label="Early attendance is included in the added total"></SfCheckBox>
+        </div>
+        <div class="col-6">
+            <SfCheckBox @bind-Checked="@WorksysVM.Worksys.LeaveEarly" Disabled="bol_ReadOnly" CssClass="e-custom" Label="Early discharge is included in the deduction total"></SfCheckBox>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-6">
+            <SfCheckBox @bind-Checked="@WorksysVM.Worksys.ti" Disabled="bol_ReadOnly" CssClass="e-custom" Label="First Shift"></SfCheckBox>
+        </div>
+    </div>
+
+    @if (WorksysVM.Worksys.ti)
+    {
+        <div class="row mt-3">
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4 mt-1">
+                <span style="color:#6372C4">The number of hours allowed to register before the start of the shift 1</span>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <InputNumber Disabled="@bol_ReadOnly" @bind-Value="@WorksysVM.Worksys.First_as"></InputNumber>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4 mt-1">
+                <span style="color:#6372C4">The number of hours allowed to register after the start of the shift 1</span>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <InputNumber Disabled="@bol_ReadOnly" @bind-Value="@WorksysVM.Worksys.First_ae"></InputNumber>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4 mt-1">
+                <span style="color:#6372C4">The number of hours allowed to register before the end of the shift 1</span>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <InputNumber Disabled="@bol_ReadOnly" @bind-Value="@WorksysVM.Worksys.First_ls"></InputNumber>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4 mt-1">
+                <span style="color:#6372C4">The number of hours allowed to register after the end of the shift 1</span>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <InputNumber Disabled="@bol_ReadOnly" min="0" max="23" @bind-Value="@WorksysVM.Worksys.First_le"></InputNumber>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4 mt-1">
+                <span style="color:#6372C4">The number of hours allowed to register before the start of the shift 2</span>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <InputNumber Disabled="@bol_ReadOnly" @bind-Value="@WorksysVM.Worksys.Second_as"></InputNumber>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4 mt-1">
+                <span style="color:#6372C4">The number of hours allowed to register before the start of the shift 2</span>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <InputNumber Disabled="@bol_ReadOnly" @bind-Value="@WorksysVM.Worksys.Second_ae"></InputNumber>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4 mt-1">
+                <span style="color:#6372C4">The number of hours allowed to register before the end of the shift 2</span>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <InputNumber Disabled="@bol_ReadOnly" @bind-Value="@WorksysVM.Worksys.Second_ls"></InputNumber>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4 mt-1">
+                <span style="color:#6372C4">The number of hours allowed to register after the end of the shift 2</span>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                <InputNumber Disabled="@bol_ReadOnly" @bind-Value="@WorksysVM.Worksys.Second_le"></InputNumber>
+            </div>
+        </div>
+    }
+</div>
+
 @code {
+
     [Parameter] public WorksysViewModel WorksysVM { get; set; }
     [Parameter] public bool bol_ReadOnly { get; set; }
 
-    public DateTime? End { get; set; }
 }
+
+
+<style>
+    input[type=number] {
+        width: 70px;
+    }
+</style>

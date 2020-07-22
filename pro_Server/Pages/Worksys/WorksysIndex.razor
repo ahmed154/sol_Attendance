@@ -38,12 +38,17 @@
 {
     [Inject] public IWorksysService WorksysService { get; set; }
     [Inject] NavigationManager NavigationManager { get; set; }
+    [Inject] public IJSRuntime JSRuntime { get; set; }
 
     public List<WorksysViewModel> WorksysVMs { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         WorksysVMs = (await WorksysService.GetWorksyss()).OrderByDescending(x => x.Worksys.Id).ToList();
+        if (WorksysVMs.Count > 0 && !string.IsNullOrEmpty(WorksysVMs[0].Exception))
+        {
+            await JSRuntime.Notfication(WorksysVMs[0].Exception, IJSRuntimeExtensionMethods.SweetAlertMessageType.error, 10000);
+        }
     }
 
     public void RowSelectHandler(RowSelectEventArgs<WorksysViewModel> args)

@@ -6,7 +6,7 @@
 <EditForm Model="WorksysVM" Context="formContext">
     <ObjectGraphDataAnnotationsValidator />
 
-    <div class="container border p-3 pb-5">
+    <div class="container border p-3 pb-1">
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
                 <SfTextBox id="name" Placeholder="Name" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@WorksysVM.Worksys.Name"></SfTextBox>
@@ -42,9 +42,11 @@
             <div class="col-9 mt-5">
                 @if (@bol_Sa)
                 {
-                    <WorksysSaturday DaysAnimateClass="@DaysAnimateClass"
+                    <WorksysSaturday 
+                                     DaysAnimateClass="@DaysAnimateClass"
                                      bol_ReadOnly="@bol_ReadOnly"
-                                     WorksysVM="@WorksysVM" />
+                                     WorksysVM="@WorksysVM">
+                    </WorksysSaturday>
                 }
                 @if (@bol_Su)
                 {
@@ -73,19 +75,11 @@
             </div>
         </div>
 
-        <div class="row mt-3">
-            <button class="btn border offset-lg-10 offset-md-10 offset-sm-9" @onclick=@(()=> bol_Advanced = !bol_Advanced)>
-                Advanced <i class="fa fa-angle-down" aria-hidden="true"></i>
-            </button>
-        </div>
-
-        @if(bol_Advanced)
-        {
             <WorksysAdvanced 
-                     bol_ReadOnly="@bol_ReadOnly"
-                     WorksysVM="@WorksysVM" />
-        }
-
+                             bol_ReadOnly="@bol_ReadOnly" 
+                             WorksysVM="@WorksysVM"
+                             >
+            </WorksysAdvanced>     
     </div>
 
 
@@ -100,6 +94,8 @@
     [Parameter] public WorksysViewModel WorksysVM { get; set; } = new WorksysViewModel();
     [Parameter] public EventCallback<WorksysViewModel> ecb_Save { get; set; }
     [Parameter] public string Type { get; set; }
+
+    //protected DateTime? End { get; set; }
 
     protected bool bol_ReadOnly { get; set; } = false;
     protected bool bol_Advanced { get; set; } = false;
@@ -134,6 +130,22 @@
         }
     }
 
+    #region Pro
+    void CalcDayHours()
+    {
+        if (WorksysVM.Worksys.End == null) { return; }
+
+        TimeSpan end = WorksysVM.Worksys.End.Value.TimeOfDay;
+        TimeSpan start = DateTime.Parse("12:00 AM").TimeOfDay;
+
+        TimeSpan result = end - start;
+
+        WorksysVM.Worksys.Day_Hours = (24 + result.Hours);
+        WorksysVM.Worksys.Day_Min = result.Minutes;
+    }
+
+    #endregion
+
     public async Task ParentSubmit()
     {
         await JSRuntime.InvokeVoidAsync("SubmitForm", "sub");
@@ -142,6 +154,8 @@
     public async Task Submit(EditContext formContext)
     {
         if (!formContext.Validate()) return;
+
+        CalcDayHours();
         await ecb_Save.InvokeAsync(WorksysVM);
     }
 
