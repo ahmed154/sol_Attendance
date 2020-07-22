@@ -35,14 +35,16 @@
                     <button class="btn btn-block @((CurrentDay==6)? "selected": "")" @onclick=@(()=> Swich(6)) style="text-align:right">Thursday</button>
                 </div>
                 <div class="row">
-                    <button class="btn btn-block @((CurrentDay==7)? "selected": "")"  @onclick=@(()=> Swich(7)) style="text-align:right">Friday</button>
+                    <button class="btn btn-block @((CurrentDay==7)? "selected": "")" @onclick=@(()=> Swich(7)) style="text-align:right">Friday</button>
                 </div>
             </div>
 
             <div class="col-9 mt-5">
                 @if (@bol_Sa)
                 {
-                    <WorksysDay DaysAnimateClass="@DaysAnimateClass" />
+                    <WorksysSaturday DaysAnimateClass="@DaysAnimateClass"
+                                     bol_ReadOnly="@bol_ReadOnly"
+                                     WorksysVM="@WorksysVM" />
                 }
                 @if (@bol_Su)
                 {
@@ -70,7 +72,23 @@
                 }
             </div>
         </div>
+
+        <div class="row mt-3">
+            <button class="btn border offset-lg-10 offset-md-10 offset-sm-9" @onclick=@(()=> bol_Advanced = !bol_Advanced)>
+                Advanced <i class="fa fa-angle-down" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        @if(bol_Advanced)
+        {
+            <WorksysAdvanced 
+                     bol_ReadOnly="@bol_ReadOnly"
+                     WorksysVM="@WorksysVM" />
+        }
+
     </div>
+
+
 
     <button id="sub" class="btn btn-danger" type="submit" hidden @onclick=@(()=> Submit(formContext))>Submit</button>
 
@@ -84,8 +102,9 @@
     [Parameter] public string Type { get; set; }
 
     protected bool bol_ReadOnly { get; set; } = false;
+    protected bool bol_Advanced { get; set; } = false;
 
-    protected bool bol_Sa { get; set; } = true;
+    protected bool bol_Sa { get; set; } = false;
     protected bool bol_Su { get; set; } = false;
     protected bool bol_Mo { get; set; } = false;
     protected bool bol_Tu { get; set; } = false;
@@ -93,15 +112,11 @@
     protected bool bol_Th { get; set; } = false;
     protected bool bol_Fr { get; set; } = false;
 
-    protected string SelectedClass { get; set; } = "selected;";
+
     protected string DaysAnimateClass { get; set; }
     protected int CurrentDay { get; set; }
-    protected int NextDay { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
 
-    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
