@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using pro_API.Repositories;
 using pro_Models.Models;
 using pro_Models.ViewModels;
@@ -144,6 +145,23 @@ namespace pro_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error deleting data");
+            }
+        }
+        /// <summary>
+        /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("drop")]
+        public async Task<ActionResult> GetWorksyssForDrop()
+        {
+            try
+            {
+                return Ok(await worksysRepository.GetWorksyssForDropDowenList());
+            }
+            catch (DbUpdateException Ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    Ex.InnerException.Message);
             }
         }
     }

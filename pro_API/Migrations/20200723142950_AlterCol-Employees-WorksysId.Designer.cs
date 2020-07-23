@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pro_API.Data;
 
 namespace pro_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200723142950_AlterCol-Employees-WorksysId")]
+    partial class AlterColEmployeesWorksysId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,10 +265,10 @@ namespace pro_API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DepartId")
+                    b.Property<int?>("DepartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DeviceId")
+                    b.Property<int?>("DeviceId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -276,10 +278,11 @@ namespace pro_API.Migrations
                     b.Property<string>("Number")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SecId")
+                    b.Property<int?>("SecId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WorksysId")
+                    b.Property<int?>("WorksysId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -757,21 +760,15 @@ namespace pro_API.Migrations
                 {
                     b.HasOne("pro_Models.Models.Depart", "Depart")
                         .WithMany()
-                        .HasForeignKey("DepartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartId");
 
                     b.HasOne("pro_Models.Models.Device", "Device")
                         .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DeviceId");
 
                     b.HasOne("pro_Models.Models.Sec", "Sec")
                         .WithMany()
-                        .HasForeignKey("SecId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SecId");
 
                     b.HasOne("pro_Models.Models.Worksys", "Worksys")
                         .WithMany()

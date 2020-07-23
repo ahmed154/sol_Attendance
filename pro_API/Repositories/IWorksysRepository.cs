@@ -15,7 +15,7 @@ namespace pro_API.Repositories
         Task<WorksysViewModel> DeleteWorksys(int worksysId);
         
         /////////////////////////////////////////////////////////// Other interface methods
-        //Task<Worksys> GetWorksysByName(string name);
         Task<Worksys> GetWorksysByname(Worksys worksys);
+        Task<List<DropDowenIntModel>> GetWorksyssForDropDowenList();
     }
 }

@@ -105,5 +105,10 @@ namespace pro_API.Repositories
             return await appDbContext.Worksyss.Where(n => n.Name == worksys.Name && n.Id != worksys.Id)
                 .FirstOrDefaultAsync();
         }
+        public async Task<List<DropDowenIntModel>> GetWorksyssForDropDowenList()
+        {
+            var dropDowenIntModel = await appDbContext.Worksyss.Select(x => new DropDowenIntModel { Id = x.Id, Name = x.Name }).ToListAsync();
+            return dropDowenIntModel;
+        }
     }
 }

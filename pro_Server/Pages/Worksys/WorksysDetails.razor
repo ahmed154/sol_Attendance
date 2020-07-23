@@ -30,12 +30,16 @@
         protected override async Task OnInitializedAsync()
         {
             WorksysVM = await WorksysService.GetWorksys(id);
+            if (!string.IsNullOrEmpty(WorksysVM.Exception))
+            {
+                await JSRuntime.Notfication(WorksysVM.Exception, IJSRuntimeExtensionMethods.SweetAlertMessageType.error, 10000);
+            }
         }
 
         protected async Task DeleteConfirm()
         {
             bool result = await JSRuntime.Confirm("Confirmation", $"Are you sure you want to delete Worksysment {WorksysVM.Worksys.Name} ?", IJSRuntimeExtensionMethods.SweetAlertMessageType.question);
-            if (result) await Delete();  
+            if (result) await Delete();
         }
         protected async Task Delete()
         {

@@ -16,6 +16,7 @@ namespace pro_API.MapperProfiles
             CreateMap<Sec, Sec>();
             CreateMap<Device, Device>();
             CreateMap<Worksys, Worksys>();
+            CreateMap<Employee, Employee>();
         }
     }
 }

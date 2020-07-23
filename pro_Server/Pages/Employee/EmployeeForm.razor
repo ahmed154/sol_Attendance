@@ -1,23 +1,49 @@
 @using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
 
-    <EditForm Model="EmployeeVM" Context="formContext">
-        <ObjectGraphDataAnnotationsValidator />
+<EditForm Model="EmployeeVM" Context="formContext">
+    <ObjectGraphDataAnnotationsValidator />
 
-        <div class="container border p-3">
+    <div class="container border p-3">
 
-            <div class="row">
-                <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <SfTextBox id="name" Placeholder="Name" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@EmployeeVM.Employee.Name"></SfTextBox>
-                    <ValidationMessage For="@(() => EmployeeVM.Employee.Name)" />
-                </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox id="name" Placeholder="Name" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@EmployeeVM.Employee.Name"></SfTextBox>
+                <ValidationMessage For="@(() => EmployeeVM.Employee.Name)" />
             </div>
-
-
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox id="name" Placeholder="Number" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@EmployeeVM.Employee.Number"></SfTextBox>
+                <ValidationMessage For="@(() => EmployeeVM.Employee.Number)" />
+            </div>
         </div>
-        <button id="sub" class="btn btn-danger" type="submit" hidden @onclick=@(()=> Submit(formContext))>Submit</button>
-    </EditForm>
+        <div class="row mt-2">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfComboBox @bind-Value="@EmployeeVM.Employee.WorksysId" Readonly="bol_ReadOnly" TValue="int" TItem="DropDowenIntModel" Placeholder="Select a System" Query="@Query">
+                    <SfDataManager Url="https://localhost:44305/api/worksys/drop"
+                                   Adaptor="Adaptors.WebApiAdaptor"
+                                   CrossDomain=true>
+                    </SfDataManager>
+                    <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
+
+                    <ComboBoxTemplates TItem="DropDowenIntModel">
+                        <NoRecordsTemplate>
+                            <span class='norecord'> NO DATA AVAILABLE</span>
+                        </NoRecordsTemplate>
+                    </ComboBoxTemplates>
+
+                </SfComboBox>
+                <ValidationMessage For="@(() => EmployeeVM.Employee.WorksysId)" />
+            </div>
+        </div>
+
+
+    </div>
+    <button id="sub" class="btn btn-danger" type="submit" hidden @onclick=@(()=> Submit(formContext))>Submit</button>
+</EditForm>
 
 @code {
+    public Query Query = new Query();
 
     [Inject] public IJSRuntime JSRuntime { get; set; }
     [Parameter] public EmployeeViewModel EmployeeVM { get; set; } = new EmployeeViewModel();
@@ -53,9 +79,7 @@
     {
         if (!formContext.Validate()) return;
         await ecb_Save.InvokeAsync(EmployeeVM);
-    }
-
-}
+    } }
 
 <style>
     .e-input-picture::before {
