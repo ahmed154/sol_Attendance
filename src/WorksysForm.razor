@@ -1,41 +1,30 @@
-@using Syncfusion.Blazor.Inputs
+﻿@using Syncfusion.Blazor.Inputs
 
-<EditForm Model="DeviceVM" Context="formContext">
-    <ObjectGraphDataAnnotationsValidator />
+    <EditForm Model="DepartVM" Context="formContext">
+        <ObjectGraphDataAnnotationsValidator />
 
-    <div class="container border p-3">
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                <SfTextBox id="name" Placeholder="Name" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@DeviceVM.Device.Name"></SfTextBox>
-                <ValidationMessage For="@(() => DeviceVM.Device.Name)" />
+        <div class="container border p-3">
+
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                    <SfTextBox id="name" Placeholder="Name" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@DepartVM.Depart.Name"></SfTextBox>
+                    <ValidationMessage For="@(() => DepartVM.Depart.Name)" />
+                </div>
             </div>
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                <SfTextBox Placeholder="Number" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@DeviceVM.Device.Number"></SfTextBox>
-                <ValidationMessage For="@(() => DeviceVM.Device.Number)" />
-            </div>
+
+
         </div>
-        <div class="row mt-5">
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                <SfTextBox Placeholder="IP" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@DeviceVM.Device.Ip"></SfTextBox>
-                <ValidationMessage For="@(() => DeviceVM.Device.Ip)" />
-            </div>
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                <SfTextBox Placeholder="Port" Readonly="@bol_ReadOnly" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@DeviceVM.Device.Port"></SfTextBox>
-                <ValidationMessage For="@(() => DeviceVM.Device.Port)" />
-            </div>
-        </div>
-    </div>
-
-    <button id="sub" class="btn btn-danger" type="submit" hidden @onclick=@(()=> Submit(formContext))>Submit</button>
-
-</EditForm>
+        <button id="sub" class="btn btn-danger" type="submit" hidden @onclick=@(()=> Submit(formContext))>Submit</button>
+    </EditForm>
 
 @code {
 
     [Inject] public IJSRuntime JSRuntime { get; set; }
-    [Parameter] public DeviceViewModel DeviceVM { get; set; } = new DeviceViewModel();
-    [Parameter] public EventCallback<DeviceViewModel> ecb_Save { get; set; }
+    [Parameter] public DepartViewModel DepartVM { get; set; } = new DepartViewModel();
+    [Parameter] public EventCallback<DepartViewModel> ecb_Save { get; set; }
+
     [Parameter] public string Type { get; set; }
+
 
     protected bool bol_ReadOnly { get; set; } = false;
 
@@ -63,7 +52,7 @@
     public async Task Submit(EditContext formContext)
     {
         if (!formContext.Validate()) return;
-        await ecb_Save.InvokeAsync(DeviceVM);
+        await ecb_Save.InvokeAsync(DepartVM);
     }
 
 }
@@ -136,6 +125,4 @@
         content: '\e769';
         font-family: e-icons;
     }
-
 </style>
-

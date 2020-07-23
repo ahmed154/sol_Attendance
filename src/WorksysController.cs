@@ -12,21 +12,21 @@ namespace pro_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DeviceController : ControllerBase
+    public class WorksysController : ControllerBase
     {
-        private readonly IDeviceRepository deviceRepository;
+        private readonly IWorksysRepository worksysRepository;
 
-        public DeviceController(IDeviceRepository deviceRepository)
+        public WorksysController(IWorksysRepository worksysRepository)
         {
-            this.deviceRepository = deviceRepository;
+            this.worksysRepository = worksysRepository;
         }
 
         [HttpGet("{search}")]
-        public async Task<ActionResult<IEnumerable<DeviceViewModel>>> Search(string name)
+        public async Task<ActionResult<IEnumerable<WorksysViewModel>>> Search(string name)
         {
             try
             {
-                var result = await deviceRepository.Search(name);
+                var result = await worksysRepository.Search(name);
 
                 if (result.Any())
                 {
@@ -42,11 +42,11 @@ namespace pro_API.Controllers
             }
         }
         [HttpGet]
-        public async Task<ActionResult> GetDevices()
+        public async Task<ActionResult> GetWorksyss()
         {
             try
             {
-                return Ok(await deviceRepository.GetDevices());
+                return Ok(await worksysRepository.GetWorksyss());
             }
             catch (Exception)
             {
@@ -55,11 +55,11 @@ namespace pro_API.Controllers
             }
         }
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<DeviceViewModel>> GetDevice(int id)
+        public async Task<ActionResult<WorksysViewModel>> GetWorksys(int id)
         {
             try
             {
-                var result = await deviceRepository.GetDevice(id);
+                var result = await worksysRepository.GetWorksys(id);
 
                 if (result == null) return NotFound();
 
@@ -72,53 +72,53 @@ namespace pro_API.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult<DeviceViewModel>> CreateDevice(DeviceViewModel deviceViewModel)
+        public async Task<ActionResult<WorksysViewModel>> CreateWorksys(WorksysViewModel worksysViewModel)
         {
             try
             {
-                if (deviceViewModel == null)return BadRequest();
+                if (worksysViewModel == null)return BadRequest();
 
                 // Add custom model validation error
-                Device dep = await deviceRepository.GetDeviceByname(deviceViewModel.Device);
+                Worksys dep = await worksysRepository.GetWorksysByname(worksysViewModel.Worksys);
                 if (dep != null)
                 {
-                    ModelState.AddModelError("Name", $"Device name: {deviceViewModel.Device.Name} already in use");
+                    ModelState.AddModelError("Name", $"Worksys name: {worksysViewModel.Worksys.Name} already in use");
                     return BadRequest(ModelState);
                 }
 
-                deviceViewModel = await deviceRepository.AddDevice(deviceViewModel);
+                worksysViewModel = await worksysRepository.AddWorksys(worksysViewModel);
 
-                return CreatedAtAction(nameof(GetDevice),
-                    new { id = deviceViewModel.Device.Id }, deviceViewModel);
+                return CreatedAtAction(nameof(GetWorksys),
+                    new { id = worksysViewModel.Worksys.Id }, worksysViewModel);
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error creating new device record");
+                    "Error creating new worksys record");
             }
         }
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<DeviceViewModel>> UpdateDevice(int id, DeviceViewModel deviceViewModel)
+        public async Task<ActionResult<WorksysViewModel>> UpdateWorksys(int id, WorksysViewModel worksysViewModel)
         {
             try
             {
-                if (id != deviceViewModel.Device.Id)
-                    return BadRequest("Device ID mismatch");
+                if (id != worksysViewModel.Worksys.Id)
+                    return BadRequest("Worksys ID mismatch");
 
-                var deviceToUpdate = await deviceRepository.GetDevice(id);
+                var worksysToUpdate = await worksysRepository.GetWorksys(id);
 
-                if (deviceToUpdate == null)
-                    return NotFound($"Device with Id = {id} not found");
+                if (worksysToUpdate == null)
+                    return NotFound($"Worksys with Id = {id} not found");
 
                 // Add custom model validation error
-                Device dep = await deviceRepository.GetDeviceByname(deviceViewModel.Device);
+                Worksys dep = await worksysRepository.GetWorksysByname(worksysViewModel.Worksys);
                 if (dep != null)
                 {
-                    ModelState.AddModelError("Name", $"Device name: {deviceViewModel.Device.Name} already in use");
+                    ModelState.AddModelError("Name", $"Worksys name: {worksysViewModel.Worksys.Name} already in use");
                     return BadRequest(ModelState);
                 }
 
-                return await deviceRepository.UpdateDevice(deviceViewModel);
+                return await worksysRepository.UpdateWorksys(worksysViewModel);
             }
             catch (Exception)
             {
@@ -127,18 +127,18 @@ namespace pro_API.Controllers
             }
         }
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult<DeviceViewModel>> DeleteDevice(int id)
+        public async Task<ActionResult<WorksysViewModel>> DeleteWorksys(int id)
         {
             try
             {
-                var deviceToDelete = await deviceRepository.GetDevice(id);
+                var worksysToDelete = await worksysRepository.GetWorksys(id);
 
-                if (deviceToDelete == null)
+                if (worksysToDelete == null)
                 {
-                    return NotFound($"Device with Id = {id} not found");
+                    return NotFound($"Worksys with Id = {id} not found");
                 }
 
-                return await deviceRepository.DeleteDevice(id);
+                return await worksysRepository.DeleteWorksys(id);
             }
             catch (Exception)
             {

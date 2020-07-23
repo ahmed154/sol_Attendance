@@ -9,7 +9,7 @@ using pro_API.Data;
 namespace pro_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -256,23 +256,17 @@ namespace pro_API.Migrations
                     b.ToTable("Devices");
                 });
 
-            modelBuilder.Entity("pro_Models.Models.Emp", b =>
+            modelBuilder.Entity("pro_Models.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("DepartId")
+                    b.Property<int>("DepartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Departd")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DeviceId1")
+                    b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -285,23 +279,20 @@ namespace pro_API.Migrations
                     b.Property<int>("SecId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WSId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WorkSysId")
+                    b.Property<int>("WorksysId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DepartId");
 
-                    b.HasIndex("DeviceId1");
+                    b.HasIndex("DeviceId");
 
                     b.HasIndex("SecId");
 
-                    b.HasIndex("WorkSysId");
+                    b.HasIndex("WorksysId");
 
-                    b.ToTable("Emps");
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("pro_Models.Models.IO", b =>
@@ -314,11 +305,7 @@ namespace pro_API.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("DeviceId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DeviceId1")
+                    b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
                     b.Property<int>("EmpId")
@@ -339,7 +326,7 @@ namespace pro_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceId1");
+                    b.HasIndex("DeviceId");
 
                     b.HasIndex("EmpId");
 
@@ -353,10 +340,7 @@ namespace pro_API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("DeviceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DeviceId1")
+                    b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EditTime")
@@ -379,7 +363,7 @@ namespace pro_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceId1");
+                    b.HasIndex("DeviceId");
 
                     b.HasIndex("EmpId");
 
@@ -485,6 +469,9 @@ namespace pro_API.Migrations
                     b.Property<bool>("frs")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("frsa")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("frse")
                         .HasColumnType("datetime2");
 
@@ -525,9 +512,6 @@ namespace pro_API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("moss")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("rfsa")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("saBonus")
@@ -769,15 +753,19 @@ namespace pro_API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("pro_Models.Models.Emp", b =>
+            modelBuilder.Entity("pro_Models.Models.Employee", b =>
                 {
                     b.HasOne("pro_Models.Models.Depart", "Depart")
                         .WithMany()
-                        .HasForeignKey("DepartId");
+                        .HasForeignKey("DepartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("pro_Models.Models.Device", "Device")
                         .WithMany()
-                        .HasForeignKey("DeviceId1");
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("pro_Models.Models.Sec", "Sec")
                         .WithMany()
@@ -785,18 +773,22 @@ namespace pro_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("pro_Models.Models.Worksys", "WorkSys")
+                    b.HasOne("pro_Models.Models.Worksys", "Worksys")
                         .WithMany()
-                        .HasForeignKey("WorkSysId");
+                        .HasForeignKey("WorksysId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("pro_Models.Models.IO", b =>
                 {
                     b.HasOne("pro_Models.Models.Device", "Device")
                         .WithMany()
-                        .HasForeignKey("DeviceId1");
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("pro_Models.Models.Emp", "Emp")
+                    b.HasOne("pro_Models.Models.Employee", "Emp")
                         .WithMany()
                         .HasForeignKey("EmpId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -807,9 +799,11 @@ namespace pro_API.Migrations
                 {
                     b.HasOne("pro_Models.Models.Device", "Device")
                         .WithMany()
-                        .HasForeignKey("DeviceId1");
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("pro_Models.Models.Emp", "Emp")
+                    b.HasOne("pro_Models.Models.Employee", "Emp")
                         .WithMany()
                         .HasForeignKey("EmpId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -10,7 +10,7 @@ using pro_API.Data;
 namespace pro_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200706204914_ini")]
+    [Migration("20200723015030_ini")]
     partial class ini
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -258,23 +258,17 @@ namespace pro_API.Migrations
                     b.ToTable("Devices");
                 });
 
-            modelBuilder.Entity("pro_Models.Models.Emp", b =>
+            modelBuilder.Entity("pro_Models.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("DepartId")
+                    b.Property<int>("DepartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Departd")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DeviceId1")
+                    b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -287,23 +281,20 @@ namespace pro_API.Migrations
                     b.Property<int>("SecId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WSId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WorkSysId")
+                    b.Property<int>("WorksysId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DepartId");
 
-                    b.HasIndex("DeviceId1");
+                    b.HasIndex("DeviceId");
 
                     b.HasIndex("SecId");
 
-                    b.HasIndex("WorkSysId");
+                    b.HasIndex("WorksysId");
 
-                    b.ToTable("Emps");
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("pro_Models.Models.IO", b =>
@@ -316,11 +307,7 @@ namespace pro_API.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("DeviceId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DeviceId1")
+                    b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
                     b.Property<int>("EmpId")
@@ -341,7 +328,7 @@ namespace pro_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceId1");
+                    b.HasIndex("DeviceId");
 
                     b.HasIndex("EmpId");
 
@@ -355,10 +342,7 @@ namespace pro_API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("DeviceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DeviceId1")
+                    b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EditTime")
@@ -381,7 +365,7 @@ namespace pro_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceId1");
+                    b.HasIndex("DeviceId");
 
                     b.HasIndex("EmpId");
 
@@ -404,7 +388,7 @@ namespace pro_API.Migrations
                     b.ToTable("Secs");
                 });
 
-            modelBuilder.Entity("pro_Models.Models.WorkSys", b =>
+            modelBuilder.Entity("pro_Models.Models.Worksys", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -422,6 +406,9 @@ namespace pro_API.Migrations
 
                     b.Property<int>("Day_Min")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("End")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("First_ae")
                         .HasColumnType("decimal(18,2)");
@@ -460,8 +447,8 @@ namespace pro_API.Migrations
                     b.Property<bool>("frBonus")
                         .HasColumnType("bit");
 
-                    b.Property<string>("frPeriod_Hours")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("frPeriod_Hours")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("frType")
                         .HasColumnType("bit");
@@ -469,13 +456,13 @@ namespace pro_API.Migrations
                     b.Property<bool>("frf")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("frfa")
+                    b.Property<DateTime?>("frfa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("frfe")
+                    b.Property<DateTime?>("frfe")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("frfs")
+                    b.Property<DateTime?>("frfs")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("frh")
@@ -484,17 +471,20 @@ namespace pro_API.Migrations
                     b.Property<bool>("frs")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("frse")
+                    b.Property<DateTime?>("frsa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("frss")
+                    b.Property<DateTime?>("frse")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("frss")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("moBonus")
                         .HasColumnType("bit");
 
-                    b.Property<string>("moPeriod_Hours")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("moPeriod_Hours")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("moType")
                         .HasColumnType("bit");
@@ -502,13 +492,13 @@ namespace pro_API.Migrations
                     b.Property<bool>("mof")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("mofa")
+                    b.Property<DateTime?>("mofa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("mofe")
+                    b.Property<DateTime?>("mofe")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("mofs")
+                    b.Property<DateTime?>("mofs")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("moh")
@@ -517,23 +507,20 @@ namespace pro_API.Migrations
                     b.Property<bool>("mos")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("mosa")
+                    b.Property<DateTime?>("mosa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("mose")
+                    b.Property<DateTime?>("mose")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("moss")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("rfsa")
+                    b.Property<DateTime?>("moss")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("saBonus")
                         .HasColumnType("bit");
 
-                    b.Property<string>("saPeriod_Hours")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("saPeriod_Hours")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("saType")
                         .HasColumnType("bit");
@@ -541,13 +528,13 @@ namespace pro_API.Migrations
                     b.Property<bool>("saf")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("safa")
+                    b.Property<DateTime?>("safa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("safe")
+                    b.Property<DateTime?>("safe")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("safs")
+                    b.Property<DateTime?>("safs")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("sah")
@@ -556,20 +543,20 @@ namespace pro_API.Migrations
                     b.Property<bool>("sas")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("sasa")
+                    b.Property<DateTime?>("sasa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("sase")
+                    b.Property<DateTime?>("sase")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("sass")
+                    b.Property<DateTime?>("sass")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("suBonus")
                         .HasColumnType("bit");
 
-                    b.Property<string>("suPeriod_Hours")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("suPeriod_Hours")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("suType")
                         .HasColumnType("bit");
@@ -577,13 +564,13 @@ namespace pro_API.Migrations
                     b.Property<bool>("suf")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("sufa")
+                    b.Property<DateTime?>("sufa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("sufe")
+                    b.Property<DateTime?>("sufe")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("sufs")
+                    b.Property<DateTime?>("sufs")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("suh")
@@ -592,20 +579,20 @@ namespace pro_API.Migrations
                     b.Property<bool>("sus")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("susa")
+                    b.Property<DateTime?>("susa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("suse")
+                    b.Property<DateTime?>("suse")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("suss")
+                    b.Property<DateTime?>("suss")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("thBonus")
                         .HasColumnType("bit");
 
-                    b.Property<string>("thPeriod_Hours")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("thPeriod_Hours")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("thType")
                         .HasColumnType("bit");
@@ -613,13 +600,13 @@ namespace pro_API.Migrations
                     b.Property<bool>("thf")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("thfa")
+                    b.Property<DateTime?>("thfa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("thfe")
+                    b.Property<DateTime?>("thfe")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("thfs")
+                    b.Property<DateTime?>("thfs")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("thh")
@@ -628,13 +615,13 @@ namespace pro_API.Migrations
                     b.Property<bool>("ths")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("thsa")
+                    b.Property<DateTime?>("thsa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("thse")
+                    b.Property<DateTime?>("thse")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("thss")
+                    b.Property<DateTime?>("thss")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("ti")
@@ -643,8 +630,8 @@ namespace pro_API.Migrations
                     b.Property<bool>("tuBonus")
                         .HasColumnType("bit");
 
-                    b.Property<string>("tuPeriod_Hours")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("tuPeriod_Hours")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("tuType")
                         .HasColumnType("bit");
@@ -652,13 +639,13 @@ namespace pro_API.Migrations
                     b.Property<bool>("tuf")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("tufa")
+                    b.Property<DateTime?>("tufa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("tufe")
+                    b.Property<DateTime?>("tufe")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("tufs")
+                    b.Property<DateTime?>("tufs")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("tuh")
@@ -667,20 +654,20 @@ namespace pro_API.Migrations
                     b.Property<bool>("tus")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("tusa")
+                    b.Property<DateTime?>("tusa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("tuse")
+                    b.Property<DateTime?>("tuse")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("tuss")
+                    b.Property<DateTime?>("tuss")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("weBonus")
                         .HasColumnType("bit");
 
-                    b.Property<string>("wePeriod_Hours")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("wePeriod_Hours")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("weType")
                         .HasColumnType("bit");
@@ -688,13 +675,13 @@ namespace pro_API.Migrations
                     b.Property<bool>("wef")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("wefa")
+                    b.Property<DateTime?>("wefa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("wefe")
+                    b.Property<DateTime?>("wefe")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("wefs")
+                    b.Property<DateTime?>("wefs")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("weh")
@@ -703,18 +690,18 @@ namespace pro_API.Migrations
                     b.Property<bool>("wes")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("wesa")
+                    b.Property<DateTime?>("wesa")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("wese")
+                    b.Property<DateTime?>("wese")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("wess")
+                    b.Property<DateTime?>("wess")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkSyss");
+                    b.ToTable("Worksyss");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -768,15 +755,19 @@ namespace pro_API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("pro_Models.Models.Emp", b =>
+            modelBuilder.Entity("pro_Models.Models.Employee", b =>
                 {
                     b.HasOne("pro_Models.Models.Depart", "Depart")
                         .WithMany()
-                        .HasForeignKey("DepartId");
+                        .HasForeignKey("DepartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("pro_Models.Models.Device", "Device")
                         .WithMany()
-                        .HasForeignKey("DeviceId1");
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("pro_Models.Models.Sec", "Sec")
                         .WithMany()
@@ -784,18 +775,22 @@ namespace pro_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("pro_Models.Models.WorkSys", "WorkSys")
+                    b.HasOne("pro_Models.Models.Worksys", "Worksys")
                         .WithMany()
-                        .HasForeignKey("WorkSysId");
+                        .HasForeignKey("WorksysId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("pro_Models.Models.IO", b =>
                 {
                     b.HasOne("pro_Models.Models.Device", "Device")
                         .WithMany()
-                        .HasForeignKey("DeviceId1");
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("pro_Models.Models.Emp", "Emp")
+                    b.HasOne("pro_Models.Models.Employee", "Emp")
                         .WithMany()
                         .HasForeignKey("EmpId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -806,9 +801,11 @@ namespace pro_API.Migrations
                 {
                     b.HasOne("pro_Models.Models.Device", "Device")
                         .WithMany()
-                        .HasForeignKey("DeviceId1");
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("pro_Models.Models.Emp", "Emp")
+                    b.HasOne("pro_Models.Models.Employee", "Emp")
                         .WithMany()
                         .HasForeignKey("EmpId")
                         .OnDelete(DeleteBehavior.Cascade)

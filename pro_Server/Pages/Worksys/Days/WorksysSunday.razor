@@ -7,15 +7,15 @@
         <div class="checkbox-control mt-2">
             <div class="row">
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
-                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.saType" Disabled="bol_ReadOnly" Label="Non Fixed &ensp;&ensp;"></SfCheckBox>
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.suType" Disabled="bol_ReadOnly" Label="Non Fixed &ensp;&ensp;"></SfCheckBox>
                 </div>
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
-                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.sah" Disabled="bol_ReadOnly"  Label="Holiday"></SfCheckBox>
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.suh" Disabled="bol_ReadOnly"  Label="Holiday"></SfCheckBox>
                 </div>
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
-                    @if (WorksysVM.Worksys.sah)
+                    @if (WorksysVM.Worksys.suh)
                     {
-                        <SfCheckBox @bind-Checked="@WorksysVM.Worksys.saBonus" Disabled="bol_ReadOnly"  Label="Bonus"></SfCheckBox>
+                        <SfCheckBox @bind-Checked="@WorksysVM.Worksys.suBonus" Disabled="bol_ReadOnly"  Label="Bonus"></SfCheckBox>
                     }
                 </div>
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
@@ -23,58 +23,58 @@
                 </div>
             </div>
         </div>
-        @if (!WorksysVM.Worksys.saType && !WorksysVM.Worksys.sah)
+        @if (!WorksysVM.Worksys.suType && !WorksysVM.Worksys.suh)
         {
             <div class="row mt-5">
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3 mt-2">
-                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.saf" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="First Shift &ensp;&ensp;&ensp;"></SfCheckBox>
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.suf" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="First Shift &ensp;&ensp;&ensp;"></SfCheckBox>
                 </div>
 
-                @if (WorksysVM.Worksys.saf)
+                @if (WorksysVM.Worksys.suf)
                 {
                     <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-1">
                         <lable style="color:#6372C4">From</lable>
                     </div>
                     <div class="col-xs-2 col-sm-2 col-lg-2 col-md-1">
-                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.safs" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.sufs" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
                     </div>
                     <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-2">
                         <lable style="color:#6372C4">To</lable>
                     </div>
                     <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.safe" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.sufe" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
                     </div>
                 }
             </div>
 
             <div class="row mt-3">
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3 mt-2">
-                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.sas" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="Second Shift"></SfCheckBox>
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.sus" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="Second Shift"></SfCheckBox>
                 </div>
-                @if (WorksysVM.Worksys.sas)
+                @if (WorksysVM.Worksys.sus)
                 {
                     <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-1">
                         <lable style="color:#6372C4">From</lable>
                     </div>
                     <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.sass" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.suss" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
                     </div>
                     <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-2">
                         <lable style="color:#6372C4">To</lable>
                     </div>
                     <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.sase" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.suse" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
                     </div>
                 }
             </div>
         }
         else
         {
-            if ((WorksysVM.Worksys.saType && !WorksysVM.Worksys.sah) || (WorksysVM.Worksys.saType && WorksysVM.Worksys.sah && WorksysVM.Worksys.saBonus))
+            if ((WorksysVM.Worksys.suType && !WorksysVM.Worksys.suh) || (WorksysVM.Worksys.suType && WorksysVM.Worksys.suh && WorksysVM.Worksys.suBonus))
             {
                 <div class="offset-3 col-xs-2 col-sm-2 col-lg-2 col-md-2 mt-5">
                     <lable>Number of hours</lable>
-                    <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.saPeriod_Hours" Readonly="bol_ReadOnly" Format="HH:mm" Placeholder="Select a time"></SfTimePicker>
+                    <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.suPeriod_Hours" Readonly="bol_ReadOnly" Format="HH:mm" Placeholder="Select a time"></SfTimePicker>
                 </div>
             }
         }

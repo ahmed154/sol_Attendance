@@ -18,7 +18,7 @@ namespace pro_API.Data
         public DbSet<Depart> Departs { get; set; }
         public DbSet<Sec> Secs { get; set; }
         public DbSet<Device> Devices { get; set; }
-        public DbSet<Emp> Emps { get; set; }
+        public DbSet<Employee> Employees { get; set; }
         public DbSet<IO> IOs { get; set; }
         public DbSet<IOEdit> IOEdits { get; set; }
         public DbSet<Worksys> Worksyss { get; set; }

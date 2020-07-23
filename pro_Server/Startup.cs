@@ -71,6 +71,10 @@ namespace pro_Server
             {
                 client.BaseAddress = new Uri(uri);
             });
+            services.AddHttpClient<IEmployeeService, EmployeeService>(client =>
+            {
+                client.BaseAddress = new Uri(uri);
+            });
 
         }
 

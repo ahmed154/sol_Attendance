@@ -1,7 +1,5 @@
 @using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Calendars
+@using pro_Server.Pages.Worksys.Days
 
 <EditForm Model="WorksysVM" Context="formContext">
     <ObjectGraphDataAnnotationsValidator />
@@ -42,43 +40,59 @@
             <div class="col-9 mt-5">
                 @if (@bol_Sa)
                 {
-                    <WorksysSaturday 
-                                     DaysAnimateClass="@DaysAnimateClass"
+                    <WorksysSaturday DaysAnimateClass="@DaysAnimateClass"
                                      bol_ReadOnly="@bol_ReadOnly"
                                      WorksysVM="@WorksysVM">
                     </WorksysSaturday>
                 }
                 @if (@bol_Su)
                 {
-                    <WorksysDay DaysAnimateClass="@DaysAnimateClass" />
-                }
+                    <WorksysSunday DaysAnimateClass="@DaysAnimateClass"
+                                     bol_ReadOnly="@bol_ReadOnly"
+                                     WorksysVM="@WorksysVM">
+                    </WorksysSunday>
+                 }
                 @if (@bol_Mo)
                 {
-                    <WorksysDay DaysAnimateClass="@DaysAnimateClass" />
-                }
+                    <WorksysMonday DaysAnimateClass="@DaysAnimateClass"
+                                     bol_ReadOnly="@bol_ReadOnly"
+                                     WorksysVM="@WorksysVM">
+                    </WorksysMonday>
+                 }
                 @if (@bol_Tu)
                 {
-                    <WorksysDay DaysAnimateClass="@DaysAnimateClass" />
-                }
+                    <WorksysTusday DaysAnimateClass="@DaysAnimateClass"
+                                     bol_ReadOnly="@bol_ReadOnly"
+                                     WorksysVM="@WorksysVM">
+                    </WorksysTusday>
+                 }
                 @if (@bol_We)
                 {
-                    <WorksysDay DaysAnimateClass="@DaysAnimateClass" />
-                }
+                    <WorksysWednesday DaysAnimateClass="@DaysAnimateClass"
+                                     bol_ReadOnly="@bol_ReadOnly"
+                                     WorksysVM="@WorksysVM">
+                    </WorksysWednesday>
+                 }
                 @if (@bol_Th)
                 {
-                    <WorksysDay DaysAnimateClass="@DaysAnimateClass" />
-                }
+                    <WorksysThursday DaysAnimateClass="@DaysAnimateClass"
+                                     bol_ReadOnly="@bol_ReadOnly"
+                                     WorksysVM="@WorksysVM">
+                    </WorksysThursday>
+                 }
                 @if (@bol_Fr)
                 {
-                    <WorksysDay DaysAnimateClass="@DaysAnimateClass" />
-                }
+                    <WorksysFriday DaysAnimateClass="@DaysAnimateClass"
+                                     bol_ReadOnly="@bol_ReadOnly"
+                                     WorksysVM="@WorksysVM">
+                    </WorksysFriday>
+                 }
             </div>
         </div>
 
             <WorksysAdvanced 
                              bol_ReadOnly="@bol_ReadOnly" 
-                             WorksysVM="@WorksysVM"
-                             >
+                             WorksysVM="@WorksysVM">
             </WorksysAdvanced>     
     </div>
 

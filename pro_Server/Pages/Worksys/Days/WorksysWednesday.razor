@@ -7,15 +7,15 @@
         <div class="checkbox-control mt-2">
             <div class="row">
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
-                    <SfCheckBox @bind-Checked="@Type" Disabled="bol_ReadOnly" Label="Non Fixed &ensp;&ensp;"></SfCheckBox>
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.weType" Disabled="bol_ReadOnly" Label="Non Fixed &ensp;&ensp;"></SfCheckBox>
                 </div>
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
-                    <SfCheckBox @bind-Checked="@h" Disabled="bol_ReadOnly"  Label="Holiday"></SfCheckBox>
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.weh" Disabled="bol_ReadOnly"  Label="Holiday"></SfCheckBox>
                 </div>
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
-                    @if (h)
+                    @if (WorksysVM.Worksys.weh)
                     {
-                        <SfCheckBox @bind-Checked="@Bonus" Disabled="bol_ReadOnly"  Label="Bonus"></SfCheckBox>
+                        <SfCheckBox @bind-Checked="@WorksysVM.Worksys.weBonus" Disabled="bol_ReadOnly"  Label="Bonus"></SfCheckBox>
                     }
                 </div>
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
@@ -23,58 +23,58 @@
                 </div>
             </div>
         </div>
-        @if (!Type && !h)
+        @if (!WorksysVM.Worksys.weType && !WorksysVM.Worksys.weh)
         {
             <div class="row mt-5">
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3 mt-2">
-                    <SfCheckBox @bind-Checked="@f" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="First Shift &ensp;&ensp;"></SfCheckBox>
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.wef" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="First Shift &ensp;&ensp;&ensp;"></SfCheckBox>
                 </div>
 
-                @if (f)
+                @if (WorksysVM.Worksys.wef)
                 {
                     <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-1">
                         <lable style="color:#6372C4">From</lable>
                     </div>
                     <div class="col-xs-2 col-sm-2 col-lg-2 col-md-1">
-                        <SfTimePicker TValue="DateTime?" @bind-Value="@fs" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.wefs" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
                     </div>
                     <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-2">
                         <lable style="color:#6372C4">To</lable>
                     </div>
                     <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                        <SfTimePicker TValue="DateTime?" @bind-Value="@fe" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.wefe" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
                     </div>
                 }
             </div>
 
             <div class="row mt-3">
                 <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3 mt-2">
-                    <SfCheckBox @bind-Checked="@s" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="Second Shift"></SfCheckBox>
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.wes" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="Second Shift"></SfCheckBox>
                 </div>
-                @if (s)
+                @if (WorksysVM.Worksys.wes)
                 {
                     <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-1">
                         <lable style="color:#6372C4">From</lable>
                     </div>
                     <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                        <SfTimePicker TValue="DateTime?" @bind-Value="@ss" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.wess" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
                     </div>
                     <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-2">
                         <lable style="color:#6372C4">To</lable>
                     </div>
                     <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                        <SfTimePicker TValue="DateTime?" @bind-Value="@se" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.wese" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
                     </div>
                 }
             </div>
         }
         else
         {
-            if (Type || (Type && h && Bonus))
+            if ((WorksysVM.Worksys.weType && !WorksysVM.Worksys.weh) || (WorksysVM.Worksys.weType && WorksysVM.Worksys.weh && WorksysVM.Worksys.weBonus))
             {
                 <div class="offset-3 col-xs-2 col-sm-2 col-lg-2 col-md-2 mt-5">
                     <lable>Number of hours</lable>
-                    <SfTimePicker TValue="DateTime?" @bind-Value="@Hours" Readonly="bol_ReadOnly" Format="HH:mm" Placeholder="Select a time"></SfTimePicker>
+                    <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.wePeriod_Hours" Readonly="bol_ReadOnly" Format="HH:mm" Placeholder="Select a time"></SfTimePicker>
                 </div>
             }
         }
@@ -82,23 +82,9 @@
 
 @code {
 
-    //[Parameter] public WorksysViewModel WorksysVM { get; set; }
+    [Parameter] public WorksysViewModel WorksysVM { get; set; }
     [Parameter] public string DaysAnimateClass { get; set; }
     [Parameter] public bool bol_ReadOnly { get; set; }
-
-    [Parameter] public bool Type { get; set; }
-    [Parameter] public bool h { get; set; }
-    [Parameter] public bool Bonus { get; set; }
-
-    [Parameter] public bool f { get; set; }
-    [Parameter] public DateTime? fs { get; set; }
-    [Parameter] public DateTime? fe { get; set; }
-
-    [Parameter] public bool s { get; set; }
-    [Parameter] public DateTime? ss { get; set; }
-    [Parameter] public DateTime? se { get; set; }
-
-    [Parameter] public DateTime? Hours { get; set; }
 }
 
 <style>

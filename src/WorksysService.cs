@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace pro_Server.Services
 {
-    public class DeviceService : IDeviceService
+    public class WorksysService : IWorksysService
     {
         private readonly HttpClient httpClient;
         private readonly IHttpService httpService;
-        private string url = "api/device";
+        private string url = "api/worksys";
         private JsonSerializerOptions defaultJsonSerializerOptions =>new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
 
-        public DeviceService(HttpClient httpClient, IHttpService httpService)
+        public WorksysService(HttpClient httpClient, IHttpService httpService)
         {
             this.httpClient = httpClient;
             this.httpService = httpService;
@@ -30,28 +30,28 @@ namespace pro_Server.Services
             var responseString = await httpResponse.Content.ReadAsStringAsync();
             return System.Text.Json.JsonSerializer.Deserialize<T>(responseString, options);
         }
-        async Task<IEnumerable<DeviceViewModel>> IDeviceService.GetDevices()
+        async Task<IEnumerable<WorksysViewModel>> IWorksysService.GetWorksyss()
         {
-            List<DeviceViewModel> deviceViewModels = new List<DeviceViewModel>();
-            var response = await httpService.Get<List<DeviceViewModel>>(url);
+            List<WorksysViewModel> worksysViewModels = new List<WorksysViewModel>();
+            var response = await httpService.Get<List<WorksysViewModel>>(url);
 
             if (!response.Success)
             {
-                deviceViewModels.Add(new DeviceViewModel { Exception = await response.GetBody() });
+                worksysViewModels.Add(new WorksysViewModel { Exception = await response.GetBody() });
             }
             else
             {     
-                 deviceViewModels = response.Response;              
+                 worksysViewModels = response.Response;              
             }
-            return deviceViewModels;
+            return worksysViewModels;
         }
-        public async Task<IEnumerable<Device>> GetDevices()
+        public async Task<IEnumerable<Worksys>> GetWorksyss()
         {
             var responseHTTP = await httpClient.GetAsync(url);
 
             if (responseHTTP.IsSuccessStatusCode)
             {
-                var response = await Deserialize<List<Device>>(responseHTTP, defaultJsonSerializerOptions);
+                var response = await Deserialize<List<Worksys>>(responseHTTP, defaultJsonSerializerOptions);
                 return response;
             }
             else
@@ -61,68 +61,68 @@ namespace pro_Server.Services
         }
 
 
-        public async Task<DeviceViewModel> CreateDevice(DeviceViewModel deviceViewModel)
+        public async Task<WorksysViewModel> CreateWorksys(WorksysViewModel worksysViewModel)
         {
-            var dataJson = System.Text.Json.JsonSerializer.Serialize(deviceViewModel);
+            var dataJson = System.Text.Json.JsonSerializer.Serialize(worksysViewModel);
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
             var responseHTTP = await httpClient.PostAsync(url, stringContent);
 
             if (responseHTTP.IsSuccessStatusCode)
             {
-                deviceViewModel = await Deserialize<DeviceViewModel>(responseHTTP, defaultJsonSerializerOptions);
+                worksysViewModel = await Deserialize<WorksysViewModel>(responseHTTP, defaultJsonSerializerOptions);
             }
             else
             {
-                deviceViewModel.Exception = await responseHTTP.Content.ReadAsStringAsync();
+                worksysViewModel.Exception = await responseHTTP.Content.ReadAsStringAsync();
             }
-            return deviceViewModel;
+            return worksysViewModel;
         }
-        public async Task<DeviceViewModel> UpdateDevice(int id, DeviceViewModel deviceViewModel)
+        public async Task<WorksysViewModel> UpdateWorksys(int id, WorksysViewModel worksysViewModel)
         {
-            var dataJson = System.Text.Json.JsonSerializer.Serialize(deviceViewModel);
+            var dataJson = System.Text.Json.JsonSerializer.Serialize(worksysViewModel);
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
             var responseHTTP = await httpClient.PutAsync($"{url}/{id}", stringContent);
 
             if (responseHTTP.IsSuccessStatusCode)
             {
-                var response = await Deserialize<DeviceViewModel>(responseHTTP, defaultJsonSerializerOptions);
-                deviceViewModel = response;
+                var response = await Deserialize<WorksysViewModel>(responseHTTP, defaultJsonSerializerOptions);
+                worksysViewModel = response;
             }
             else
             {
-                deviceViewModel.Exception = await responseHTTP.Content.ReadAsStringAsync();
+                worksysViewModel.Exception = await responseHTTP.Content.ReadAsStringAsync();
             }
-            return deviceViewModel;
+            return worksysViewModel;
         }
 
-        public async Task<DeviceViewModel> DeleteDevice(int id)
+        public async Task<WorksysViewModel> DeleteWorksys(int id)
         {
-            DeviceViewModel deviceViewModel = new DeviceViewModel();
+            WorksysViewModel worksysViewModel = new WorksysViewModel();
 
             var response = await httpService.Delete($"{url}/{id}");
             if (!response.Success)
             {
-                deviceViewModel.Exception = await response.GetBody();
+                worksysViewModel.Exception = await response.GetBody();
             }
-            return deviceViewModel;
+            return worksysViewModel;
         }
 
 
 
-        public async Task<DeviceViewModel> GetDevice(int id)
+        public async Task<WorksysViewModel> GetWorksys(int id)
         {
-            DeviceViewModel deviceViewModel = new DeviceViewModel();
-            var response = await httpService.Get<DeviceViewModel>($"{url}/{id}");
+            WorksysViewModel worksysViewModel = new WorksysViewModel();
+            var response = await httpService.Get<WorksysViewModel>($"{url}/{id}");
 
             if (!response.Success)
             {
-                deviceViewModel.Exception = await response.GetBody();
+                worksysViewModel.Exception = await response.GetBody();
             }
             else
             {
-                deviceViewModel.Device = response.Response.Device;
+                worksysViewModel.Worksys = response.Response.Worksys;
             }
-            return deviceViewModel;
+            return worksysViewModel;
         }
     }
 }

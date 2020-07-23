@@ -1,0 +1,121 @@
+﻿
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Calendars
+
+    <div class="w3-container w3-center @DaysAnimateClass">
+
+        <div class="checkbox-control mt-2">
+            <div class="row">
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.tuType" Disabled="bol_ReadOnly" Label="Non Fixed &ensp;&ensp;"></SfCheckBox>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.tuh" Disabled="bol_ReadOnly"  Label="Holiday"></SfCheckBox>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+                    @if (WorksysVM.Worksys.tuh)
+                    {
+                        <SfCheckBox @bind-Checked="@WorksysVM.Worksys.tuBonus" Disabled="bol_ReadOnly"  Label="Bonus"></SfCheckBox>
+                    }
+                </div>
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3">
+
+                </div>
+            </div>
+        </div>
+        @if (!WorksysVM.Worksys.tuType && !WorksysVM.Worksys.tuh)
+        {
+            <div class="row mt-5">
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3 mt-2">
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.tuf" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="First Shift &ensp;&ensp;&ensp;"></SfCheckBox>
+                </div>
+
+                @if (WorksysVM.Worksys.tuf)
+                {
+                    <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-1">
+                        <lable style="color:#6372C4">From</lable>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-1">
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.tufs" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                    </div>
+                    <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-2">
+                        <lable style="color:#6372C4">To</lable>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.tufe" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                    </div>
+                }
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-xs-3 col-sm-3 col-lg-3 col-md-3 mt-2">
+                    <SfCheckBox @bind-Checked="@WorksysVM.Worksys.tus" Disabled="bol_ReadOnly"  CssClass="e-custom" Label="Second Shift"></SfCheckBox>
+                </div>
+                @if (WorksysVM.Worksys.tus)
+                {
+                    <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-1">
+                        <lable style="color:#6372C4">From</lable>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.tuss" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                    </div>
+                    <div class="col-xs-1 col-sm-1 col-lg-1 col-md-1 mt-2">
+                        <lable style="color:#6372C4">To</lable>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.tuse" Readonly="bol_ReadOnly" Placeholder="Select a time"></SfTimePicker>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            if ((WorksysVM.Worksys.tuType && !WorksysVM.Worksys.tuh) || (WorksysVM.Worksys.tuType && WorksysVM.Worksys.tuh && WorksysVM.Worksys.tuBonus))
+            {
+                <div class="offset-3 col-xs-2 col-sm-2 col-lg-2 col-md-2 mt-5">
+                    <lable>Number of hours</lable>
+                    <SfTimePicker TValue="DateTime?" @bind-Value="@WorksysVM.Worksys.tuPeriod_Hours" Readonly="bol_ReadOnly" Format="HH:mm" Placeholder="Select a time"></SfTimePicker>
+                </div>
+            }
+        }
+    </div>
+
+@code {
+
+    [Parameter] public WorksysViewModel WorksysVM { get; set; }
+    [Parameter] public string DaysAnimateClass { get; set; }
+    [Parameter] public bool bol_ReadOnly { get; set; }
+}
+
+<style>
+    .e-custom .e-frame {
+        border-radius: 75%;
+    }
+
+    .e-checkicon.e-checkbox-wrapper .e-frame.e-check::before {
+        content: '\e77d';
+    }
+
+    .e-checkicon.e-checkbox-wrapper .e-check {
+        font-size: 10px;
+    }
+
+    .e-checkicon.e-checkbox-wrapper .e-frame.e-check {
+        background-color: white;
+        border-color: grey;
+        color: grey;
+    }
+
+    .e-checkicon.e-checkbox-wrapper:hover .e-frame.e-check {
+        background-color: white;
+        border-color: grey;
+        color: grey;
+    }
+
+    .e-checkicon.e-checkbox-wrapper .e-checkbox:focus + .e-frame.e-check {
+        background-color: white;
+        border-color: grey;
+        box-shadow: none;
+        color: grey;
+    }
+</style>

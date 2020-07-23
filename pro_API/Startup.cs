@@ -60,6 +60,7 @@ namespace pro_API
             services.AddScoped<ISecRepository, SecRepository>();
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<IWorksysRepository, WorksysRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
         }
 

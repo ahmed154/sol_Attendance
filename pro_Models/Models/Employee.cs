@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace pro_Models.Models
 {
-    public class Emp
+    public class Employee
     {
         public int Id { get; set; }
         public string Number { get; set; }
         [Required]
         public string Name { get; set; }
-        public string DeviceId { get; set; }
         [Required]
-        public int WSId { get; set; }
-        public int Departd { get; set; }
-        public int SecId { get; set; }
+        public int WorksysId { get; set; }
+        public int? DepartId { get; set; }
+        public int? SecId { get; set; }
+        public int? DeviceId { get; set; }
         //////////////////////////////////Relation
         public Device Device { get; set; }
-        public Worksys WorkSys { get; set; }
+        public Worksys Worksys { get; set; }
         public Depart Depart { get; set; }
         public Sec Sec { get; set; }
     }

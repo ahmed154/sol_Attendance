@@ -107,7 +107,7 @@ namespace pro_Models.Models
         public bool frs { get; set; } = false;
         public DateTime? frss { get; set; }
         public DateTime? frse { get; set; }
-        public DateTime? rfsa { get; set; }
+        public DateTime? frsa { get; set; }
         public bool BonusCheck { get; set; } = true;
         public bool LateCheck { get; set; } = true;
         public bool AttEarly { get; set; } = false;

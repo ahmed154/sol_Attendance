@@ -1,0 +1,48 @@
+@page "/employee/new"
+
+<div class="container bg-white rounded border p-3">
+    <div class="pl-3">
+        <div class="row">
+            <span style="font-size:18px; color:#8f8f8f;"><a href="/employee" style="color:#6372C4">Attendance Systems</a> /  New</span>
+        </div>
+        <div class="row pt-4">
+            <button class="btn btn-primary" type="submit" @onclick=@(()=> Save()) style="background-color:#6372C4"><i class="far fa-save"></i> Save</button>
+            <a class="btn border ml-1" href="/employee"><i class="fas fa-undo"></i> Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div class="container bg-white border box-shadow p-3 rounded">
+    <EmployeeForm EmployeeVM="EmployeeVM" ecb_Save="Create" Type="New" @ref="Form" />
+</div>
+
+
+@code
+{
+    [Inject] public IEmployeeService EmployeeService { get; set; }
+    [Inject] public IJSRuntime JSRuntime { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    protected EmployeeForm Form;
+    EmployeeViewModel EmployeeVM { get; set; } = new EmployeeViewModel();
+
+    private async Task Save()
+    {
+        await Form.ParentSubmit();
+    }
+    private async Task Create()
+    {
+        EmployeeVM.Exception = null;
+        EmployeeViewModel createdEmployeeViewModel = await EmployeeService.CreateEmployee(EmployeeVM);
+
+        if (string.IsNullOrEmpty(createdEmployeeViewModel.Exception))
+        {
+            await JSRuntime.Notfication($"Employeement {EmployeeVM.Employee.Name} has been created successfully!", IJSRuntimeExtensionMethods.SweetAlertMessageType.success, 3000);
+            NavigationManager.NavigateTo($"/employee/{createdEmployeeViewModel.Employee.Id}");
+        }
+        else
+        {
+            await JSRuntime.Notfication(createdEmployeeViewModel.Exception, IJSRuntimeExtensionMethods.SweetAlertMessageType.error, 10000);
+        }
+    }
+}

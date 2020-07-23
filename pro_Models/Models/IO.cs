@@ -19,11 +19,11 @@ namespace pro_Models.Models
         [Required]
         public int EmpId { get; set; }
         [Required]
-        public string DeviceId { get; set; }
+        public int DeviceId { get; set; }
         public bool Priority { get; set; }
         public bool Deleted { get; set; }
         //////////////////////////////////Relation
-        public Emp Emp { get; set; }
+        public Employee Emp { get; set; }
         public Device Device { get; set; }
     }
 }
