@@ -38,7 +38,7 @@
         </div>
         <div class="row mt-2">
             <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                <SfComboBox @bind-Value="@EmployeeVM.Employee.DeviceId" Readonly="bol_ReadOnly" TValue="int?" TItem="DropDowenIntModel" Placeholder="Select a Department" Query="@Query">
+                <SfComboBox @bind-Value="@EmployeeVM.Employee.DepartId" Readonly="bol_ReadOnly" TValue="int?" TItem="DropDowenIntModel" Placeholder="Select a Department" Query="@Query">
                     <SfDataManager Url="https://localhost:44305/api/depart/drop"
                                    Adaptor="Adaptors.WebApiAdaptor"
                                    CrossDomain=true>

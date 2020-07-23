@@ -17,5 +17,6 @@ namespace pro_API.Repositories
         /////////////////////////////////////////////////////////// Other interface methods
         //Task<Sec> GetSecByName(string name);
         Task<Sec> GetSecByname(Sec sec);
+        Task<List<DropDowenIntModel>> GetForDropDowenList();
     }
 }

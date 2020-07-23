@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using pro_API.Repositories;
 using pro_Models.Models;
 using pro_Models.ViewModels;
@@ -35,10 +36,10 @@ namespace pro_API.Controllers
 
                 return NotFound();
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    Ex.InnerException.Message);
             }
         }
         [HttpGet]
@@ -48,10 +49,10 @@ namespace pro_API.Controllers
             {
                 return Ok(await departRepository.GetDeparts());
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    Ex.InnerException.Message);
             }
         }
         [HttpGet("{id:int}")]
@@ -65,10 +66,10 @@ namespace pro_API.Controllers
 
                 return result;
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    Ex.InnerException.Message);
             }
         }
         [HttpPost]
@@ -91,10 +92,10 @@ namespace pro_API.Controllers
                 return CreatedAtAction(nameof(GetDepart),
                     new { id = departViewModel.Depart.Id }, departViewModel);
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error creating new depart record");
+                    Ex.InnerException.Message);
             }
         }
         [HttpPut("{id:int}")]
@@ -120,10 +121,10 @@ namespace pro_API.Controllers
 
                 return await departRepository.UpdateDepart(departViewModel);
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error updating data");
+                    Ex.InnerException.Message);
             }
         }
         [HttpDelete("{id:int}")]
@@ -140,10 +141,27 @@ namespace pro_API.Controllers
 
                 return await departRepository.DeleteDepart(id);
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error deleting data");
+                    Ex.InnerException.Message);
+            }
+        }
+        /// <summary>
+        /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("drop")]
+        public async Task<ActionResult> GetForDrop()
+        {
+            try
+            {
+                return Ok(await departRepository.GetForDropDowenList());
+            }
+            catch (DbUpdateException Ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    Ex.InnerException.Message);
             }
         }
     }

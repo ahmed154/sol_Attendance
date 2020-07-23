@@ -36,10 +36,10 @@ namespace pro_API.Controllers
 
                 return NotFound();
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    Ex.InnerException.Message);
             }
         }
         [HttpGet]
@@ -49,10 +49,10 @@ namespace pro_API.Controllers
             {
                 return Ok(await employeeRepository.GetEmployees());
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    Ex.InnerException.Message);
             }
         }
         [HttpGet("{id:int}")]
@@ -66,10 +66,10 @@ namespace pro_API.Controllers
 
                 return result;
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    Ex.InnerException.Message);
             }
         }
         [HttpPost]
@@ -78,15 +78,6 @@ namespace pro_API.Controllers
             try
             {
                 if (employeeViewModel == null)return BadRequest();
-                employeeViewModel.Employee.WorksysId = 1;
-
-                // Add custom model validation error
-                Employee dep = await employeeRepository.GetEmployeeByname(employeeViewModel.Employee);
-                if (dep != null)
-                {
-                    ModelState.AddModelError("Name", $"Employee name: {employeeViewModel.Employee.Name} already in use");
-                    return BadRequest(ModelState);
-                }
 
                 employeeViewModel = await employeeRepository.AddEmployee(employeeViewModel);
 
@@ -112,20 +103,13 @@ namespace pro_API.Controllers
                 if (employeeToUpdate == null)
                     return NotFound($"Employee with Id = {id} not found");
 
-                // Add custom model validation error
-                Employee dep = await employeeRepository.GetEmployeeByname(employeeViewModel.Employee);
-                if (dep != null)
-                {
-                    ModelState.AddModelError("Name", $"Employee name: {employeeViewModel.Employee.Name} already in use");
-                    return BadRequest(ModelState);
-                }
 
                 return await employeeRepository.UpdateEmployee(employeeViewModel);
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error updating data");
+                    Ex.InnerException.Message);
             }
         }
         [HttpDelete("{id:int}")]
@@ -142,10 +126,10 @@ namespace pro_API.Controllers
 
                 return await employeeRepository.DeleteEmployee(id);
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error deleting data");
+                    Ex.InnerException.Message);
             }
         }
     }

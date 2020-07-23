@@ -17,5 +17,6 @@ namespace pro_API.Repositories
         /////////////////////////////////////////////////////////// Other interface methods
         //Task<Depart> GetDepartByName(string name);
         Task<Depart> GetDepartByname(Depart depart);
+        Task<List<DropDowenIntModel>> GetForDropDowenList();
     }
 }

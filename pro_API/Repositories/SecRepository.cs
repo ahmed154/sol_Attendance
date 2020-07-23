@@ -96,5 +96,10 @@ namespace pro_API.Repositories
             return await appDbContext.Secs.Where(n => n.Name == sec.Name && n.Id != sec.Id)
                 .FirstOrDefaultAsync();
         }
+        public async Task<List<DropDowenIntModel>> GetForDropDowenList()
+        {
+            var dropDowenIntModel = await appDbContext.Secs.Select(x => new DropDowenIntModel { Id = x.Id, Name = x.Name }).ToListAsync();
+            return dropDowenIntModel;
+        }
     }
 }

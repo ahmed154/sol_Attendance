@@ -17,5 +17,6 @@ namespace pro_API.Repositories
         /////////////////////////////////////////////////////////// Other interface methods
         //Task<Device> GetDeviceByName(string name);
         Task<Device> GetDeviceByname(Device device);
+        Task<List<DropDowenIntModel>> GetForDropDowenList();
     }
 }

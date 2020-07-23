@@ -105,5 +105,10 @@ namespace pro_API.Repositories
             return await appDbContext.Devices.Where(n => n.Name == device.Name && n.Id != device.Id)
                 .FirstOrDefaultAsync();
         }
+        public async Task<List<DropDowenIntModel>> GetForDropDowenList()
+        {
+            var dropDowenIntModel = await appDbContext.Devices.Select(x => new DropDowenIntModel { Id = x.Id, Name = x.Name }).ToListAsync();
+            return dropDowenIntModel;
+        }
     }
 }

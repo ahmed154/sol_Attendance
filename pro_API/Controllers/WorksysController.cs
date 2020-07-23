@@ -36,10 +36,10 @@ namespace pro_API.Controllers
 
                 return NotFound();
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    Ex.InnerException.Message);
             }
         }
         [HttpGet]
@@ -49,10 +49,10 @@ namespace pro_API.Controllers
             {
                 return Ok(await worksysRepository.GetWorksyss());
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    Ex.InnerException.Message);
             }
         }
         [HttpGet("{id:int}")]
@@ -66,10 +66,10 @@ namespace pro_API.Controllers
 
                 return result;
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    Ex.InnerException.Message);
             }
         }
         [HttpPost]
@@ -92,10 +92,10 @@ namespace pro_API.Controllers
                 return CreatedAtAction(nameof(GetWorksys),
                     new { id = worksysViewModel.Worksys.Id }, worksysViewModel);
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error creating new worksys record");
+                    Ex.InnerException.Message);
             }
         }
         [HttpPut("{id:int}")]
@@ -121,10 +121,10 @@ namespace pro_API.Controllers
 
                 return await worksysRepository.UpdateWorksys(worksysViewModel);
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error updating data");
+                    Ex.InnerException.Message);
             }
         }
         [HttpDelete("{id:int}")]
@@ -141,10 +141,10 @@ namespace pro_API.Controllers
 
                 return await worksysRepository.DeleteWorksys(id);
             }
-            catch (Exception)
+            catch (DbUpdateException Ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error deleting data");
+                    Ex.InnerException.Message);
             }
         }
         /// <summary>
