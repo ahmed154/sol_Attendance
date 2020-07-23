@@ -14,7 +14,7 @@ namespace pro_Models.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public int WorksysId { get; set; }
+        public int? WorksysId { get; set; }
         public int? DepartId { get; set; }
         public int? SecId { get; set; }
         public int? DeviceId { get; set; }

@@ -10,7 +10,7 @@
         <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
             <SfTimePicker TValue="DateTime?"
                           @bind-Value="@WorksysVM.Worksys.End"
-                          Readonly="bol_ReadOnly"
+                          Readonly="@bol_ReadOnly"
                           Max=@(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15, 23, 00, 00))
                           Placeholder="Select a time"
                           >
