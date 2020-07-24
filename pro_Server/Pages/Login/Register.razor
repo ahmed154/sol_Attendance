@@ -72,11 +72,16 @@
         }
         else
         {
-            await localStorageService.SetItemAsync("emailAddress", returnedUser.EmailAddress);
-            await localStorageService.SetItemAsync("token", returnedUser.Token);
-            await localStorageService.SetItemAsync("expiration", returnedUser.Expiration);
+            //await localStorageService.SetItemAsync("emailAddress", returnedUser.EmailAddress);
+            //await localStorageService.SetItemAsync("token", returnedUser.Token);
+            //await localStorageService.SetItemAsync("expiration", returnedUser.Expiration);
 
-            await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(returnedUser);
+            //await jsRunTime.SetInLocalStorage("EmailAddress", returnedUser.EmailAddress);
+            //await jsRunTime.SetInLocalStorage("TOKENKEY", returnedUser.Token);
+            //await jsRunTime.SetInLocalStorage("Expiration", returnedUser.Expiration.ToString());
+
+
+            await ((pro_Server.Auth.JWTAuthenticationStateProvider)AuthenticationStateProvider).Login(returnedUser.Token);
             NavigationManager.NavigateTo("/index");
         }
 

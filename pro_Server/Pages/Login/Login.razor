@@ -42,33 +42,33 @@
 
 
 @code { private User User;
-            public string LoginMesssage { get; set; }
+    public string LoginMesssage { get; set; }
 
-            protected async override Task OnInitializedAsync()
-            {
-                User = new User();
-            }
+    protected async override Task OnInitializedAsync()
+    {
+        User = new User();
+    }
 
-            private async Task<bool> ValidateUser()
-            {
-                //assume that user is valid
-                //call an API
+    private async Task<bool> ValidateUser()
+    {
+        //assume that user is valid
+        //call an API
 
-                var returnedUser = await userService.LoginAsync(User);
+        var returnedUser = await userService.LoginAsync(User);
 
-                if (string.IsNullOrEmpty(returnedUser.Token))
-                {
-                    LoginMesssage = "Invalid username or password";
-                }
-                else
-                {
-                    await localStorageService.SetItemAsync("emailAddress", returnedUser.EmailAddress);
-                    await localStorageService.SetItemAsync("token", returnedUser.Token);
-                    await localStorageService.SetItemAsync("expiration", returnedUser.Expiration);
+        if (string.IsNullOrEmpty(returnedUser.Token))
+        {
+            LoginMesssage = "Invalid username or password";
+        }
+        else
+        {
+            //await localStorageService.SetItemAsync("emailAddress", returnedUser.EmailAddress);
+            //await localStorageService.SetItemAsync("token", returnedUser.Token);
+            //await localStorageService.SetItemAsync("expiration", returnedUser.Expiration);
 
-                    await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(returnedUser);
-                    NavigationManager.NavigateTo("/index");
-                }
+            await ((pro_Server.Auth.JWTAuthenticationStateProvider)AuthenticationStateProvider).Login(returnedUser.Token);
+            NavigationManager.NavigateTo("/index");
+        }
 
-                return await Task.FromResult(true);
-            } }
+        return await Task.FromResult(true);
+    } }

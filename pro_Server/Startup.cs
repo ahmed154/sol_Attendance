@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using BlazorServerApp.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using pro_Server.Auth;
 using pro_Server.Handlers;
 using pro_Server.Helpers;
 using pro_Server.Models;
@@ -22,7 +18,8 @@ namespace pro_Server
 {
     public class Startup
     {
-        string uri = "https://localhost:44305/";
+        //string uri = "https://localhost:44305/";
+        string uri = "http://ahmed154-001-site4.etempurl.com/";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -38,21 +35,30 @@ namespace pro_Server
             services.AddServerSideBlazor();
             services.AddTransient<ValidateHeaderHandler>();
             services.AddBlazoredLocalStorage();
-            services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            //services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            services.AddAuthorizationCore();
+            services.AddScoped<JWTAuthenticationStateProvider>();
+            services.AddScoped<AuthenticationStateProvider, JWTAuthenticationStateProvider>(
+                provider => provider.GetRequiredService<JWTAuthenticationStateProvider>()
+            );
+            services.AddScoped<ILoginService, JWTAuthenticationStateProvider>(
+               provider => provider.GetRequiredService<JWTAuthenticationStateProvider>()
+                );
+
+
             services.AddSyncfusionBlazor();
 
-            //services.AddHttpClient<IHttpService, HttpService>();
             services.AddHttpClient<IHttpService, HttpService>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:44305/");
+                client.BaseAddress = new Uri(uri);
             });
             services.AddHttpClient<IUserService, UserService>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:44305/");
+                client.BaseAddress = new Uri(uri);
             });
             services.AddHttpClient<IWeatherForecastService<WeatherForecast>, WeatherForecastService<WeatherForecast>>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:44305/");
+                client.BaseAddress = new Uri(uri);
             }).AddHttpMessageHandler<ValidateHeaderHandler>();
 
             services.AddHttpClient<IDepartService, DepartService>(client =>

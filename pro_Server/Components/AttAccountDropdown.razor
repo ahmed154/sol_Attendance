@@ -43,7 +43,7 @@
 
     public async Task Logout()
     {
-        await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
+        await ((pro_Server.Auth.JWTAuthenticationStateProvider)AuthenticationStateProvider).Logout();
         NavigationManager.NavigateTo("");
     }
 }
