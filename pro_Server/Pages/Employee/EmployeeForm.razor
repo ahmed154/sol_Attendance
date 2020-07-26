@@ -122,7 +122,7 @@
 @code {
     public Query Query = new Query();
 
-    [CascadingParameter] public MainBootstrapLayout.AppParam appParam { get; set; }
+    [CascadingParameter] public MainLayout.AppParam appParam { get; set; }
     [Inject] public IJSRuntime JSRuntime { get; set; }
     [Parameter] public EmployeeViewModel EmployeeVM { get; set; } = new EmployeeViewModel();
     [Parameter] public EventCallback<EmployeeViewModel> ecb_Save { get; set; }
