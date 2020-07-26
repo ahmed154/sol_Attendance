@@ -34,7 +34,7 @@
 
         protected async Task DeleteConfirm()
         {
-            bool result = await JSRuntime.Confirm("Confirmation", $"Are you sure you want to delete Devicement {DeviceVM.Device.Name} ?", IJSRuntimeExtensionMethods.SweetAlertMessageType.question);
+            bool result = await JSRuntime.Confirm("Confirmation", $"Are you sure you want to delete {DeviceVM.Device.Name} ?", IJSRuntimeExtensionMethods.SweetAlertMessageType.question);
             if (result) await Delete();  
         }
         protected async Task Delete()

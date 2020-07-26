@@ -13,13 +13,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview3.20168.3" />
-    <PackageReference Include="Blazored.LocalStorage" Version="2.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Syncfusion.Blazor" Version="18.2.0.45" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\pro_Models\pro_Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Uploads\" />
   </ItemGroup>
 
 </Project>

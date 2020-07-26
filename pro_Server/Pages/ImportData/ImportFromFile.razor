@@ -1,29 +1,179 @@
 ﻿@page "/import/file"
+@using System.IO
+@using Syncfusion.Blazor.ProgressBar
+@inject NavigationManager Navigation
 
-<h3>ImportFromFile</h3>
 
-
-
-    <div class="col-lg-12 control-section">
-        <div class="control_wrapper bg-white">
-            <SfUploader ID="UploadFiles" DropArea=".control-fluid" AllowedExtensions=".txt, .dat" MinFileSize=1 MaxFileSize=104857600>
-                <UploaderEvents OnRemove="OnFileRemove"></UploaderEvents>
-                <UploaderAsyncSettings SaveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save" RemoveUrl="https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove"></UploaderAsyncSettings>
-            </SfUploader>
-        </div>
+<div class="container bg-white rounded border p-3">
+    <div class="row mt-1 ml-3">
+        <span style="font-size:18px; color:#8f8f8f;">Import data from file</span>
     </div>
+    <div class="row pt-4 m-3">
+        <SfUploader ID="UploadFiles" Multiple="false" DropArea=".control-fluid" AllowedExtensions=".txt, .dat" MinFileSize=1 MaxFileSize=104857600>
+            <UploaderEvents ValueChange="OnChange" OnRemove="OnFileRemove"></UploaderEvents>
+        </SfUploader>
+    </div>
+</div>
 
-
-@code {
-    public void OnFileRemove(RemovingEventArgs args)
+<div class="container bg-white border box-shadow p-3 rounded mb-5">
+    @if (bol_ProgressBar)
     {
-        args.PostRawFile = false;
+        <div class="offset-3 col-6">
+            <div class="@LabelClass ml-2">Storing in database Please wait ...</div>
+            <SfProgressBar @ref="ProObj2" Type="ProgressType.Linear" Height="60"
+                           IsIndeterminate="true" Value="20" Minimum="0" Maximum="100"
+                           Theme="@CurrentTheme">
+                <ProgressBarAnimation Enable="true" Duration="2000" Delay="0" />
+            </SfProgressBar>
+        </div>
     }
-}
+    @if (bol_Grid)
+    {
+        @if (IOs == null)
+        {
+            <p>Loading ...</p>
+        }
+        else
+        {
+            <SfGrid DataSource="@IOs" AllowPaging="true" AllowSorting="true">
+                <GridPageSettings PageSize="10" />
+                <GridColumns>
+                    <GridColumn Field="EmpNumber" HeaderText="Employee" Width="100" />
+                    <GridColumn Field="TTime" HeaderText="Time" Width="200" />
+                    <GridColumn Field="DeviceNumber" HeaderText="Device" Width="200" />
+                </GridColumns>
+            </SfGrid>
+        }
+    }
+</div>
 
-<style>
-    .control_wrapper {
-        width: 350px;
-        margin: 0 auto;
+    @code
+{
+        [Inject] public IImportDataService ImportDataService { get; set; }
+        public bool bol_ProgressBar { get; set; }
+        public bool bol_Grid { get; set; }
+        public List<IO> IOs { get; set; }
+
+        #region Pro
+        void RemoveAllFromUpload()
+        {
+            System.IO.DirectoryInfo di = new DirectoryInfo("Uploads");
+
+            foreach (System.IO.FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+        }
+        #endregion
+
+        private async Task OnChange(UploadChangeEventArgs args)
+        {
+            if (args.Files == null || args.Files.Count == 0) return;
+            bol_ProgressBar = true;
+
+            var path = $@"Uploads/{DateTime.Now.Ticks}_" + args.Files[0].FileInfo.Name;
+            FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+            args.Files[0].Stream.WriteTo(filestream);
+            filestream.Close();
+            args.Files[0].Stream.Close();
+
+            try
+            {
+                await ImportDataService.ImportData(filestream);
+            }
+            catch (Exception ex) { }
+
+            bol_ProgressBar = false;
+            bol_Grid = true;
+            RemoveAllFromUpload();
+            await GetIOs();
+        }
+        private void OnFileRemove(RemovingEventArgs args)
+        {
+            args.PostRawFile = false;
+        }
+        private async Task GetIOs()
+        {
+            IOs = (await ImportDataService.GetAll()).OrderByDescending(x => x.Id).ToList();
+        }
+
+        private void onRemove(RemovingEventArgs args)
+        {
+            foreach (var removeFile in args.FilesData)
+            {
+                if (File.Exists(Path.Combine(@"rootPath", removeFile.Name)))
+                {
+                    File.Delete(Path.Combine(@"rootPath", removeFile.Name));
+                }
+            }
+        }
+
+        SfProgressBar ProObj2;
+        string LabelClass = "";
+        public void ProgressRefresh()
+        {
+            ProObj2.Refresh();
+        }
+        string CurrentUri;
+        ProgressTheme CurrentTheme;
+        protected override void OnInitialized()
+        {
+            CurrentUri = Navigation.Uri;
+            LabelClass = "progress-text-align";
+            if (CurrentUri.IndexOf("material") > -1)
+            {
+                CurrentTheme = ProgressTheme.Material;
+            }
+            else if (CurrentUri.IndexOf("fabric") > -1)
+            {
+                CurrentTheme = ProgressTheme.Fabric;
+            }
+            else if (CurrentUri.IndexOf("bootstrap4") > -1)
+            {
+                CurrentTheme = ProgressTheme.Bootstrap4;
+            }
+            else if (CurrentUri.IndexOf("bootstrap") > -1)
+            {
+                CurrentTheme = ProgressTheme.Bootstrap;
+            }
+            else if (CurrentUri.IndexOf("highcontrast") > -1)
+            {
+                CurrentTheme = ProgressTheme.HighContrast;
+                LabelClass = "progress-text-align-dark";
+            }
+            else
+            {
+                CurrentTheme = ProgressTheme.Bootstrap4;
+            }
+        }
     }
-</style>
+
+    <style>
+        .control_wrapper {
+            width: 350px;
+            margin: 0 auto;
+        }
+    </style>
+    <style>
+        #control-container {
+            padding: 0px !important;
+        }
+
+        .progress-text-align {
+            font-family: Roboto-Regular;
+            font-size: 14px;
+            color: #3D3E3C;
+        }
+
+        .progress-text-align-dark {
+            font-family: Roboto-Regular;
+            font-size: 14px;
+            color: white;
+        }
+
+        #reLoad {
+            border-radius: 4px;
+            text-transform: capitalize;
+            margin-top: 3%;
+        }
+    </style>

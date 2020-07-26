@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pro_API.Data;
 
 namespace pro_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200726002614_Update-IO-EmpId-DeviceId")]
+    partial class UpdateIOEmpIdDeviceId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,15 +308,18 @@ namespace pro_API.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("DeviceNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("DeviceId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("EmpNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EmpId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Event")
                         .HasColumnType("int");
+
+                    b.Property<string>("Index")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Priority")
                         .HasColumnType("bit");

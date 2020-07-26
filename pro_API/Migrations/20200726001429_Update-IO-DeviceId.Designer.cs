@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pro_API.Data;
 
 namespace pro_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200726001429_Update-IO-DeviceId")]
+    partial class UpdateIODeviceId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,15 +308,18 @@ namespace pro_API.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("DeviceNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("DeviceId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("EmpNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EmpId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Event")
                         .HasColumnType("int");
+
+                    b.Property<string>("Index")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Priority")
                         .HasColumnType("bit");
@@ -323,6 +328,10 @@ namespace pro_API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DeviceId");
+
+                    b.HasIndex("EmpId");
 
                     b.ToTable("IOs");
                 });
@@ -356,6 +365,10 @@ namespace pro_API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DeviceId");
+
+                    b.HasIndex("EmpId");
 
                     b.ToTable("IOEdits");
                 });
@@ -760,6 +773,32 @@ namespace pro_API.Migrations
                     b.HasOne("pro_Models.Models.Worksys", "Worksys")
                         .WithMany()
                         .HasForeignKey("WorksysId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("pro_Models.Models.IO", b =>
+                {
+                    b.HasOne("pro_Models.Models.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId");
+
+                    b.HasOne("pro_Models.Models.Employee", "Emp")
+                        .WithMany()
+                        .HasForeignKey("EmpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("pro_Models.Models.IOEdit", b =>
+                {
+                    b.HasOne("pro_Models.Models.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId");
+
+                    b.HasOne("pro_Models.Models.Employee", "Emp")
+                        .WithMany()
+                        .HasForeignKey("EmpId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

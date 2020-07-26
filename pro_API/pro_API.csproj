@@ -14,6 +14,12 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200723002939_RenameTable-Employee.cs" />
     <Compile Remove="Migrations\20200723002939_RenameTable-Employee.Designer.cs" />
+    <Compile Remove="Migrations\20200725223452_IO-Update.cs" />
+    <Compile Remove="Migrations\20200725223452_IO-Update.Designer.cs" />
+    <Compile Remove="Migrations\20200725223640_IO-Update.cs" />
+    <Compile Remove="Migrations\20200725223640_IO-Update.Designer.cs" />
+    <Compile Remove="Migrations\20200725223738_IO-Update.cs" />
+    <Compile Remove="Migrations\20200725223738_IO-Update.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

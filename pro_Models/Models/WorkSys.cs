@@ -15,7 +15,7 @@ namespace pro_Models.Models
         public int Day_Hours { get; set; } = 24;
         public int Day_Min { get; set; } = 0;
         public DateTime? End { get; set; }  = new DateTime(0001, 01, 01, 0, 0, 0);
-        public bool ti { get; set; } = false;
+        public bool ti { get; set; } = true;
         public decimal First_as { get; set; } = 2;
         public decimal First_ae { get; set; } = 2;
         public decimal First_ls { get; set; } = 2;

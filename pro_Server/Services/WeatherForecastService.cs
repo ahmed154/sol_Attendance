@@ -1,5 +1,5 @@
-﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using pro_Server.Models;
 using System;
@@ -13,19 +13,17 @@ namespace pro_Server.Services
     public class WeatherForecastService<T> : IWeatherForecastService<T>
     {
         private readonly HttpClient httpClient;
-        public ILocalStorageService LocalStorageService { get; }
 
-        public WeatherForecastService(HttpClient httpClient, ILocalStorageService localStorageService)
+        public WeatherForecastService(HttpClient httpClient)
         {
             this.httpClient = httpClient;
-            LocalStorageService = localStorageService;
         }
         public async Task<List<T>> GetAllAsync(string requestUri)
         {
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
-            var token = await LocalStorageService.GetItemAsync<string>("token");
-            requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            //var token = await LocalStorageService.GetItemAsync<string>("token");
+            //requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
             var response = await httpClient.SendAsync(requestMessage);
 

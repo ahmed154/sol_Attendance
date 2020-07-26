@@ -1,5 +1,4 @@
 using System;
-using Blazored.LocalStorage;
 using BlazorServerApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -18,8 +17,8 @@ namespace pro_Server
 {
     public class Startup
     {
-        //string uri = "https://localhost:44305/";
-        string uri = "http://ahmed154-001-site4.etempurl.com/";
+        string uri = "https://localhost:44305/";
+        //string uri = "http://ahmed154-001-site4.etempurl.com/";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,7 +33,6 @@ namespace pro_Server
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddTransient<ValidateHeaderHandler>();
-            services.AddBlazoredLocalStorage();
             //services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             services.AddAuthorizationCore();
             services.AddScoped<JWTAuthenticationStateProvider>();
@@ -81,6 +79,7 @@ namespace pro_Server
             {
                 client.BaseAddress = new Uri(uri);
             });
+            services.AddScoped<IImportDataService, ImportDataService>();
 
         }
 

@@ -38,7 +38,7 @@
 
         protected async Task DeleteConfirm()
         {
-            bool result = await JSRuntime.Confirm("Confirmation", $"Are you sure you want to delete Worksysment {WorksysVM.Worksys.Name} ?", IJSRuntimeExtensionMethods.SweetAlertMessageType.question);
+            bool result = await JSRuntime.Confirm("Confirmation", $"Are you sure you want to delete {WorksysVM.Worksys.Name} ?", IJSRuntimeExtensionMethods.SweetAlertMessageType.question);
             if (result) await Delete();
         }
         protected async Task Delete()
