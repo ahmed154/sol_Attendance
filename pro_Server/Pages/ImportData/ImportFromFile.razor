@@ -1,6 +1,7 @@
 ﻿@page "/import/file"
 @using System.IO
 @using Syncfusion.Blazor.ProgressBar
+@using Microsoft.AspNetCore.Hosting;
 @inject NavigationManager Navigation
 
 
@@ -47,133 +48,134 @@
     }
 </div>
 
-    @code
+@code
 {
-        [Inject] public IImportDataService ImportDataService { get; set; }
-        public bool bol_ProgressBar { get; set; }
-        public bool bol_Grid { get; set; }
-        public List<IO> IOs { get; set; }
+    [Inject] public IHostingEnvironment env { get; set; }
+    [Inject] public IImportDataService ImportDataService { get; set; }
+    public bool bol_ProgressBar { get; set; }
+    public bool bol_Grid { get; set; }
+    public List<IO> IOs { get; set; }
 
-        #region Pro
-        void RemoveAllFromUpload()
+    #region Pro
+    void RemoveAllFromUpload()
+    {
+        System.IO.DirectoryInfo di = new DirectoryInfo($@"{env.WebRootPath}\uploads");
+
+        foreach (System.IO.FileInfo file in di.GetFiles())
         {
-            System.IO.DirectoryInfo di = new DirectoryInfo("Uploads");
-
-            foreach (System.IO.FileInfo file in di.GetFiles())
-            {
-                file.Delete();
-            }
+            file.Delete();
         }
-        #endregion
+    }
+    #endregion
 
-        private async Task OnChange(UploadChangeEventArgs args)
+    private async Task OnChange(UploadChangeEventArgs args)
+    {
+        if (args.Files == null || args.Files.Count == 0) return;
+        bol_ProgressBar = true;
+
+        var path = $@"{env.WebRootPath}\uploads\{DateTime.Now.Ticks}_" + args.Files[0].FileInfo.Name;
+        FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+        args.Files[0].Stream.WriteTo(filestream);
+        filestream.Close();
+        args.Files[0].Stream.Close();
+
+        try
         {
-            if (args.Files == null || args.Files.Count == 0) return;
-            bol_ProgressBar = true;
-
-            var path = $@"Uploads/{DateTime.Now.Ticks}_" + args.Files[0].FileInfo.Name;
-            FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
-            args.Files[0].Stream.WriteTo(filestream);
-            filestream.Close();
-            args.Files[0].Stream.Close();
-
-            try
-            {
-                await ImportDataService.ImportData(filestream);
-            }
-            catch (Exception ex) { }
-
-            bol_ProgressBar = false;
-            bol_Grid = true;
-            RemoveAllFromUpload();
-            await GetIOs();
+            await ImportDataService.ImportData(filestream);
         }
-        private void OnFileRemove(RemovingEventArgs args)
-        {
-            args.PostRawFile = false;
-        }
-        private async Task GetIOs()
-        {
-            IOs = (await ImportDataService.GetAll()).OrderByDescending(x => x.Id).ToList();
-        }
+        catch (Exception ex) { }
 
-        private void onRemove(RemovingEventArgs args)
-        {
-            foreach (var removeFile in args.FilesData)
-            {
-                if (File.Exists(Path.Combine(@"rootPath", removeFile.Name)))
-                {
-                    File.Delete(Path.Combine(@"rootPath", removeFile.Name));
-                }
-            }
-        }
+        bol_ProgressBar = false;
+        bol_Grid = true;
+        RemoveAllFromUpload();
+        await GetIOs();
+    }
+    private void OnFileRemove(RemovingEventArgs args)
+    {
+        args.PostRawFile = false;
+    }
+    private async Task GetIOs()
+    {
+        IOs = (await ImportDataService.GetAll()).OrderByDescending(x => x.Id).ToList();
+    }
 
-        SfProgressBar ProObj2;
-        string LabelClass = "";
-        public void ProgressRefresh()
+    private void onRemove(RemovingEventArgs args)
+    {
+        foreach (var removeFile in args.FilesData)
         {
-            ProObj2.Refresh();
-        }
-        string CurrentUri;
-        ProgressTheme CurrentTheme;
-        protected override void OnInitialized()
-        {
-            CurrentUri = Navigation.Uri;
-            LabelClass = "progress-text-align";
-            if (CurrentUri.IndexOf("material") > -1)
+            if (File.Exists(Path.Combine(@"rootPath", removeFile.Name)))
             {
-                CurrentTheme = ProgressTheme.Material;
-            }
-            else if (CurrentUri.IndexOf("fabric") > -1)
-            {
-                CurrentTheme = ProgressTheme.Fabric;
-            }
-            else if (CurrentUri.IndexOf("bootstrap4") > -1)
-            {
-                CurrentTheme = ProgressTheme.Bootstrap4;
-            }
-            else if (CurrentUri.IndexOf("bootstrap") > -1)
-            {
-                CurrentTheme = ProgressTheme.Bootstrap;
-            }
-            else if (CurrentUri.IndexOf("highcontrast") > -1)
-            {
-                CurrentTheme = ProgressTheme.HighContrast;
-                LabelClass = "progress-text-align-dark";
-            }
-            else
-            {
-                CurrentTheme = ProgressTheme.Bootstrap4;
+                File.Delete(Path.Combine(@"rootPath", removeFile.Name));
             }
         }
     }
 
-    <style>
-        .control_wrapper {
-            width: 350px;
-            margin: 0 auto;
+    SfProgressBar ProObj2;
+    string LabelClass = "";
+    public void ProgressRefresh()
+    {
+        ProObj2.Refresh();
+    }
+    string CurrentUri;
+    ProgressTheme CurrentTheme;
+    protected override void OnInitialized()
+    {
+        CurrentUri = Navigation.Uri;
+        LabelClass = "progress-text-align";
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            CurrentTheme = ProgressTheme.Material;
         }
-    </style>
-    <style>
-        #control-container {
-            padding: 0px !important;
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            CurrentTheme = ProgressTheme.Fabric;
         }
+        else if (CurrentUri.IndexOf("bootstrap4") > -1)
+        {
+            CurrentTheme = ProgressTheme.Bootstrap4;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            CurrentTheme = ProgressTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            CurrentTheme = ProgressTheme.HighContrast;
+            LabelClass = "progress-text-align-dark";
+        }
+        else
+        {
+            CurrentTheme = ProgressTheme.Bootstrap4;
+        }
+    }
+}
 
-        .progress-text-align {
-            font-family: Roboto-Regular;
-            font-size: 14px;
-            color: #3D3E3C;
-        }
+<style>
+    .control_wrapper {
+        width: 350px;
+        margin: 0 auto;
+    }
+</style>
+<style>
+    #control-container {
+        padding: 0px !important;
+    }
 
-        .progress-text-align-dark {
-            font-family: Roboto-Regular;
-            font-size: 14px;
-            color: white;
-        }
+    .progress-text-align {
+        font-family: Roboto-Regular;
+        font-size: 14px;
+        color: #3D3E3C;
+    }
 
-        #reLoad {
-            border-radius: 4px;
-            text-transform: capitalize;
-            margin-top: 3%;
-        }
-    </style>
+    .progress-text-align-dark {
+        font-family: Roboto-Regular;
+        font-size: 14px;
+        color: white;
+    }
+
+    #reLoad {
+        border-radius: 4px;
+        text-transform: capitalize;
+        margin-top: 3%;
+    }
+</style>
