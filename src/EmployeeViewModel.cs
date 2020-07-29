@@ -6,10 +6,10 @@ using System.Text;
 
 namespace pro_Models.ViewModels
 {
-    public class WorksysViewModel
+    public class EmployeeViewModel
     {
         [ValidateComplexType]
-        public Worksys Worksys { get; set; } = new Worksys();
+        public Employee Employee { get; set; } = new Employee();
         public string Exception { get; set; }
     }
 }

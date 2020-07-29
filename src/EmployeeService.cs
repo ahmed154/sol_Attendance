@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace pro_Server.Services
 {
-    public class WorksysService : IWorksysService
+    public class EmployeeService : IEmployeeService
     {
         private readonly HttpClient httpClient;
         private readonly IHttpService httpService;
-        private string url = "api/worksys";
+        private string url = "api/employee";
         private JsonSerializerOptions defaultJsonSerializerOptions =>new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
 
-        public WorksysService(HttpClient httpClient, IHttpService httpService)
+        public EmployeeService(HttpClient httpClient, IHttpService httpService)
         {
             this.httpClient = httpClient;
             this.httpService = httpService;
@@ -30,28 +30,28 @@ namespace pro_Server.Services
             var responseString = await httpResponse.Content.ReadAsStringAsync();
             return System.Text.Json.JsonSerializer.Deserialize<T>(responseString, options);
         }
-        async Task<IEnumerable<WorksysViewModel>> IWorksysService.GetWorksyss()
+        async Task<IEnumerable<EmployeeViewModel>> IEmployeeService.GetEmployees()
         {
-            List<WorksysViewModel> worksysViewModels = new List<WorksysViewModel>();
-            var response = await httpService.Get<List<WorksysViewModel>>(url);
+            List<EmployeeViewModel> employeeViewModels = new List<EmployeeViewModel>();
+            var response = await httpService.Get<List<EmployeeViewModel>>(url);
 
             if (!response.Success)
             {
-                worksysViewModels.Add(new WorksysViewModel { Exception = await response.GetBody() });
+                employeeViewModels.Add(new EmployeeViewModel { Exception = await response.GetBody() });
             }
             else
             {     
-                 worksysViewModels = response.Response;              
+                 employeeViewModels = response.Response;              
             }
-            return worksysViewModels;
+            return employeeViewModels;
         }
-        public async Task<IEnumerable<Worksys>> GetWorksyss()
+        public async Task<IEnumerable<Employee>> GetEmployees()
         {
             var responseHTTP = await httpClient.GetAsync(url);
 
             if (responseHTTP.IsSuccessStatusCode)
             {
-                var response = await Deserialize<List<Worksys>>(responseHTTP, defaultJsonSerializerOptions);
+                var response = await Deserialize<List<Employee>>(responseHTTP, defaultJsonSerializerOptions);
                 return response;
             }
             else
@@ -61,68 +61,68 @@ namespace pro_Server.Services
         }
 
 
-        public async Task<WorksysViewModel> CreateWorksys(WorksysViewModel worksysViewModel)
+        public async Task<EmployeeViewModel> CreateEmployee(EmployeeViewModel employeeViewModel)
         {
-            var dataJson = System.Text.Json.JsonSerializer.Serialize(worksysViewModel);
+            var dataJson = System.Text.Json.JsonSerializer.Serialize(employeeViewModel);
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
             var responseHTTP = await httpClient.PostAsync(url, stringContent);
 
             if (responseHTTP.IsSuccessStatusCode)
             {
-                worksysViewModel = await Deserialize<WorksysViewModel>(responseHTTP, defaultJsonSerializerOptions);
+                employeeViewModel = await Deserialize<EmployeeViewModel>(responseHTTP, defaultJsonSerializerOptions);
             }
             else
             {
-                worksysViewModel.Exception = await responseHTTP.Content.ReadAsStringAsync();
+                employeeViewModel.Exception = await responseHTTP.Content.ReadAsStringAsync();
             }
-            return worksysViewModel;
+            return employeeViewModel;
         }
-        public async Task<WorksysViewModel> UpdateWorksys(int id, WorksysViewModel worksysViewModel)
+        public async Task<EmployeeViewModel> UpdateEmployee(int id, EmployeeViewModel employeeViewModel)
         {
-            var dataJson = System.Text.Json.JsonSerializer.Serialize(worksysViewModel);
+            var dataJson = System.Text.Json.JsonSerializer.Serialize(employeeViewModel);
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
             var responseHTTP = await httpClient.PutAsync($"{url}/{id}", stringContent);
 
             if (responseHTTP.IsSuccessStatusCode)
             {
-                var response = await Deserialize<WorksysViewModel>(responseHTTP, defaultJsonSerializerOptions);
-                worksysViewModel = response;
+                var response = await Deserialize<EmployeeViewModel>(responseHTTP, defaultJsonSerializerOptions);
+                employeeViewModel = response;
             }
             else
             {
-                worksysViewModel.Exception = await responseHTTP.Content.ReadAsStringAsync();
+                employeeViewModel.Exception = await responseHTTP.Content.ReadAsStringAsync();
             }
-            return worksysViewModel;
+            return employeeViewModel;
         }
 
-        public async Task<WorksysViewModel> DeleteWorksys(int id)
+        public async Task<EmployeeViewModel> DeleteEmployee(int id)
         {
-            WorksysViewModel worksysViewModel = new WorksysViewModel();
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
             var response = await httpService.Delete($"{url}/{id}");
             if (!response.Success)
             {
-                worksysViewModel.Exception = await response.GetBody();
+                employeeViewModel.Exception = await response.GetBody();
             }
-            return worksysViewModel;
+            return employeeViewModel;
         }
 
 
 
-        public async Task<WorksysViewModel> GetWorksys(int id)
+        public async Task<EmployeeViewModel> GetEmployee(int id)
         {
-            WorksysViewModel worksysViewModel = new WorksysViewModel();
-            var response = await httpService.Get<WorksysViewModel>($"{url}/{id}");
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel();
+            var response = await httpService.Get<EmployeeViewModel>($"{url}/{id}");
 
             if (!response.Success)
             {
-                worksysViewModel.Exception = await response.GetBody();
+                employeeViewModel.Exception = await response.GetBody();
             }
             else
             {
-                worksysViewModel.Worksys = response.Response.Worksys;
+                employeeViewModel.Employee = response.Response.Employee;
             }
-            return worksysViewModel;
+            return employeeViewModel;
         }
     }
 }

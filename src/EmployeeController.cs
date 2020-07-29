@@ -132,22 +132,5 @@ namespace pro_API.Controllers
                     Ex.InnerException.Message);
             }
         }
-        /// <summary>
-        /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("drop")]
-        public async Task<ActionResult> GetForDrop()
-        {
-            try
-            {
-                return Ok(await employeeRepository.GetForDropDowenList());
-            }
-            catch (DbUpdateException Ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    Ex.InnerException.Message);
-            }
-        }
     }
 }

@@ -17,6 +17,5 @@ namespace pro_API.Repositories
         /////////////////////////////////////////////////////////// Other interface methods
         //Task<Employee> GetEmployeeByName(string name);
         Task<Employee> GetEmployeeByname(Employee employee);
-        Task<List<DropDowenStringModel>> GetForDropDowenList();
     }
 }

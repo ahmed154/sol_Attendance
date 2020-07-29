@@ -1,0 +1,34 @@
+﻿@page "/report"
+
+<h3>Report</h3>
+<div class="row mt-2">
+    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+        <label class="lbl">
+            Employee
+        </label>
+    </div>
+    <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4">
+        <SfComboBox @bind-Value="@ReportVM.Employee.Number" TValue="string" TItem="DropDowenStringModel" Placeholder="Select an Employee" Query="@Query">
+            <SfDataManager Url=@(appParam.APIUrl + "/api/employee/drop")
+                           Adaptor="Adaptors.WebApiAdaptor"
+                           CrossDomain=true>
+            </SfDataManager>
+            <ComboBoxFieldSettings Text="Name" Value="Number"></ComboBoxFieldSettings>
+
+            <ComboBoxTemplates TItem="DropDowenStringModel">
+                <NoRecordsTemplate>
+                    <span class='norecord'> NO DATA AVAILABLE</span>
+                </NoRecordsTemplate>
+            </ComboBoxTemplates>
+
+        </SfComboBox>
+        @*<ValidationMessage For="@(() => ReportVM.Employee.Id)" />*@
+    </div>
+</div>
+
+@code {
+
+    public Query Query = new Query();
+    [CascadingParameter] public MainLayout.AppParam appParam { get; set; }
+    ReportViewModel ReportVM { get; set; } = new ReportViewModel();
+}

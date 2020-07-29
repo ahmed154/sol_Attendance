@@ -80,6 +80,10 @@ namespace pro_Server
                 client.BaseAddress = new Uri(uri);
             });
             services.AddScoped<IImportDataService, ImportDataService>();
+            services.AddHttpClient<IReportService, ReportService>(client =>
+            {
+                client.BaseAddress = new Uri(uri);
+            });
 
         }
 
