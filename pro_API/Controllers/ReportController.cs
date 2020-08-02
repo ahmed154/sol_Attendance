@@ -22,12 +22,11 @@ namespace pro_API.Controllers
             this.reportRepository = reportRepository;
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<ReportViewModel>> GetReport(ReportViewModel reportViewModel)
+        public async Task<ActionResult<ReportViewModel>> GetReportViewModel(ReportViewModel reportViewModel)
         {
             try
             {
-                var result = await reportRepository.GetReport(reportViewModel);
+                var result = await reportRepository.GetReportViewModel(reportViewModel);
 
                 if (result == null) return NotFound();
 

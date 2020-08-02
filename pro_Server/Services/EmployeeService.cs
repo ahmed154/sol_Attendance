@@ -30,7 +30,7 @@ namespace pro_Server.Services
             var responseString = await httpResponse.Content.ReadAsStringAsync();
             return System.Text.Json.JsonSerializer.Deserialize<T>(responseString, options);
         }
-        async Task<IEnumerable<EmployeeViewModel>> IEmployeeService.GetEmployees()
+        async Task<IEnumerable<EmployeeViewModel>> IEmployeeService.GetEmployeeVMs()
         {
             List<EmployeeViewModel> employeeViewModels = new List<EmployeeViewModel>();
             var response = await httpService.Get<List<EmployeeViewModel>>(url);
@@ -45,14 +45,26 @@ namespace pro_Server.Services
             }
             return employeeViewModels;
         }
-        public async Task<IEnumerable<Employee>> GetEmployees()
+        public async Task<List<Employee>> GetEmployees()
         {
             var responseHTTP = await httpClient.GetAsync(url);
 
             if (responseHTTP.IsSuccessStatusCode)
             {
-                var response = await Deserialize<List<Employee>>(responseHTTP, defaultJsonSerializerOptions);
-                return response;
+                var response = await Deserialize<List<EmployeeViewModel>>(responseHTTP, defaultJsonSerializerOptions);
+                List<Employee> employees = new List<Employee>();
+                foreach (var item in response)
+                {
+                    employees.Add(new Employee
+                    {
+                        Id = item.Employee.Id,
+                        Name = item.Employee.Name,
+                        WorksysId = item.Employee.WorksysId,
+                        DepartId = item.Employee.DepartId,
+                        SecId = item.Employee.SecId
+                    });
+                }
+                return employees;
             }
             else
             {

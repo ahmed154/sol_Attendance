@@ -21,8 +21,11 @@ namespace pro_API.Repositories
             this.appDbContext = appDbContext;
             this.mapper = mapper;
         }
-        public async Task<ReportViewModel> GetReport(ReportViewModel reportViewModel)
+        public async Task<ReportViewModel> GetReportViewModel(ReportViewModel reportViewModel)
         {
+            Employee emp = await appDbContext.Employees.FirstOrDefaultAsync(x => x.Id == reportViewModel.Employee.Id);
+            reportViewModel.Employee = emp;
+
             reportViewModel.IOs = await appDbContext.IOs.Where
                 (x => x.EmpNumber == reportViewModel.Employee.Number
                 && x.TTime >= reportViewModel.FromDate

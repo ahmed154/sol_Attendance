@@ -1,0 +1,201 @@
+﻿@page "/report"
+@using Syncfusion.Blazor.Calendars
+
+<div class="container bg-white rounded border p-3">
+    <div class="row">
+        <span class="ml-3" style="font-size:18px; color:#8f8f8f;">Attendance Report</span>
+    </div>
+    <EditForm Model="ReportVM" Context="formContext">
+        <ObjectGraphDataAnnotationsValidator />
+        <div class="row mt-5">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            Employee
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfComboBox TValue="int" TItem="@Employee" Placeholder="Select an Employee" Value="ReportVM.Employee.Id" DataSource="@Employees">
+                            <DropDownListEvents TValue="int" ValueChange="EmpOnChange"></DropDownListEvents>
+                            <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
+                        </SfComboBox>
+
+                        <ValidationMessage For="@(() => ReportVM.Employee.Id)" />
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            From
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfDateTimePicker @bind-Value="ReportVM.FromDate" TValue="DateTime" Placeholder="Select a date and time"></SfDateTimePicker>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            To
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfDateTimePicker @bind-Value="ReportVM.ToDate" TValue="DateTime" Placeholder="Select a date and time"></SfDateTimePicker>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            System
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfComboBox Value="@ReportVM.Employee.WorksysId" TValue="int?" TItem="DropDowenIntModel" Placeholder="Select a System" Query="@Query">
+                            <SfDataManager Url=@(appParam.APIUrl + "/api/worksys/drop")
+                                           Adaptor="Adaptors.WebApiAdaptor"
+                                           CrossDomain=true>
+                            </SfDataManager>
+                            <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
+
+                            <ComboBoxTemplates TItem="DropDowenIntModel">
+                                <NoRecordsTemplate>
+                                    <span class='norecord'> NO DATA AVAILABLE</span>
+                                </NoRecordsTemplate>
+                            </ComboBoxTemplates>
+
+                        </SfComboBox>
+                        <ValidationMessage For="@(() => ReportVM.Employee.WorksysId)" />
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            Department
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfComboBox Value="@ReportVM.Employee.DepartId" Readonly="true" TValue="int?" TItem="DropDowenIntModel" Placeholder="Select a Department" Query="@Query">
+                            <SfDataManager Url=@(appParam.APIUrl + "/api/depart/drop")
+                                           Adaptor="Adaptors.WebApiAdaptor"
+                                           CrossDomain=true>
+                            </SfDataManager>
+                            <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
+
+                            <ComboBoxTemplates TItem="DropDowenIntModel">
+                                <NoRecordsTemplate>
+                                    <span class='norecord'> NO DATA AVAILABLE</span>
+                                </NoRecordsTemplate>
+                            </ComboBoxTemplates>
+
+                        </SfComboBox>
+                        <ValidationMessage For="@(() => ReportVM.Employee.DepartId)" />
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            Section
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfComboBox Value="@ReportVM.Employee.SecId" Readonly="true" TValue="int?" TItem="DropDowenIntModel" Placeholder="Select a Section" Query="@Query">
+                            <SfDataManager Url=@(appParam.APIUrl + "/api/sec/drop")
+                                           Adaptor="Adaptors.WebApiAdaptor"
+                                           CrossDomain=true>
+                            </SfDataManager>
+                            <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
+
+                            <ComboBoxTemplates TItem="DropDowenIntModel">
+                                <NoRecordsTemplate>
+                                    <span class='norecord'> NO DATA AVAILABLE</span>
+                                </NoRecordsTemplate>
+                            </ComboBoxTemplates>
+
+                        </SfComboBox>
+                        <ValidationMessage For="@(() => ReportVM.Employee.SecId)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col offset-2">
+                        <button @onclick="ActionReport" class="btn border">
+                            Actions Report
+                        </button>
+                        <button @onclick="AttReport" class="btn btn-primary" style="background-color:#6372C4">
+                            Attendance Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+<div class="container">
+    @if (ReportVM.IOs == null)
+    {
+        <p>Loading ...</p>
+    }
+    else
+    {
+        <SfGrid DataSource="@ReportVM.IOs" AllowPaging="true" AllowSorting="true">
+            <GridPageSettings PageSize="100" />
+            <GridColumns>
+                <GridColumn Field="TTime" HeaderText="Time" Width="200" />
+                <GridColumn Field="DeviceNumber" HeaderText="Device" Width="200" />
+            </GridColumns>
+        </SfGrid>
+    }
+</div>
+
+
+
+@code
+{
+    [Inject] public IEmployeeService EmployeeService { get; set; }
+    [Inject] public IReportService ReportService { get; set; }
+
+
+    public Query Query = new Query();
+    [CascadingParameter] public MainLayout.AppParam appParam { get; set; }
+    ReportViewModel ReportVM { get; set; } = new ReportViewModel();
+
+    List<Employee> Employees = new List<Employee>();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Employees = (await EmployeeService.GetEmployees()).ToList();
+        ReportVM.Employee = Employees.FirstOrDefault(x => x.Id == 1);
+    }
+
+    void EmpOnChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int> args)
+    {
+        ReportVM.Employee = Employees.FirstOrDefault(x => x.Id == args.Value);
+    }
+
+    void AttReport()
+    {
+
+    }
+    async Task ActionReport()
+    {
+        ReportVM = await ReportService.GetReportViewModel(ReportVM);
+    }
+}
+
+<style>
+    #wrapper {
+        max-width: 300px;
+        margin: 0px auto;
+        padding-top: 20px;
+    }
+</style>

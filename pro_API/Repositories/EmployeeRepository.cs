@@ -105,9 +105,9 @@ namespace pro_API.Repositories
             return await appDbContext.Employees.Where(n => n.Name == employee.Name && n.Id != employee.Id)
                 .FirstOrDefaultAsync();
         }
-        public async Task<List<DropDowenStringModel>> GetForDropDowenList()
+        public async Task<List<DropDowenIntModel>> GetForDropDowenList()
         {
-            var dropDowenStringModel = await appDbContext.Employees.Select(x => new DropDowenStringModel { Id = x.Number, Name = x.Name }).ToListAsync();
+            var dropDowenStringModel = await appDbContext.Employees.Select(x => new DropDowenIntModel { Id = x.Id, Name = x.Name }).ToListAsync();
             return dropDowenStringModel;
         }
     }

@@ -44,7 +44,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        EmployeeVMs = (await EmployeeService.GetEmployees()).OrderByDescending(x => x.Employee.Id).ToList();
+        EmployeeVMs = (await EmployeeService.GetEmployeeVMs()).OrderByDescending(x => x.Employee.Id).ToList();
         if (EmployeeVMs.Count > 0 && !string.IsNullOrEmpty(EmployeeVMs[0].Exception))
         {
             await JSRuntime.Notfication(EmployeeVMs[0].Exception, IJSRuntimeExtensionMethods.SweetAlertMessageType.error, 10000);

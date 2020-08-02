@@ -9,7 +9,8 @@ namespace pro_Server.Services
 {
     public interface IEmployeeService
     {
-        Task<IEnumerable<EmployeeViewModel>> GetEmployees();
+        Task<IEnumerable<EmployeeViewModel>> GetEmployeeVMs();
+        Task<List<Employee>> GetEmployees();
         Task<EmployeeViewModel> GetEmployee(int id);
         Task<EmployeeViewModel> UpdateEmployee(int id, EmployeeViewModel employeeViewModel);
         Task<EmployeeViewModel> CreateEmployee(EmployeeViewModel employeeViewModel);
