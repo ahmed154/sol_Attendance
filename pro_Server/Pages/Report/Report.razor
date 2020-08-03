@@ -166,6 +166,7 @@
     public Query Query = new Query();
     [CascadingParameter] public MainLayout.AppParam appParam { get; set; }
     ReportViewModel ReportVM { get; set; } = new ReportViewModel();
+    List<AttendanceReportViewModel> attendanceReportViewModels = new List<AttendanceReportViewModel>();
 
     List<Employee> Employees = new List<Employee>();
 
@@ -180,11 +181,12 @@
     void EmpOnChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int> args)
     {
         ReportVM.Employee = Employees.FirstOrDefault(x => x.Id == args.Value);
+        ReportVM.Worksys = new Worksys { Id = 1 };
     }
 
-    void AttReport()
+    async Task AttReport()
     {
-
+        attendanceReportViewModels = await ReportService.GetAttendanceReport(ReportVM);
     }
     async Task ActionReport()
     {

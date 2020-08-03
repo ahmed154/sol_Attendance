@@ -9,6 +9,7 @@ namespace pro_Server.Services
 {
     public interface IReportService
     {
+        Task<List<AttendanceReportViewModel>> GetAttendanceReport(ReportViewModel reportViewModel);
         Task<ReportViewModel> GetReportViewModel(ReportViewModel reportViewModel);
     }
 }
