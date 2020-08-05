@@ -56,3 +56,7 @@ function Notifcation(title, type, time) {
         title: title
     })
 }
+
+function ReloadPage() {
+    location.reload();
+}

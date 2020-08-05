@@ -7,6 +7,7 @@ namespace pro_API.Repositories
 {
     public interface IReportRepository
     {
+        Task<ReportGetViewModel> GetReportGetViewModel();
         Task<ReportViewModel> GetReportViewModel(ReportViewModel reportViewModel);
     }
 }

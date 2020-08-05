@@ -33,5 +33,16 @@ namespace pro_API.Repositories
 
             return reportViewModel;
         }
+        public async Task<ReportGetViewModel> GetReportGetViewModel()
+        {
+            ReportGetViewModel reportGetViewModel = new ReportGetViewModel();
+
+            reportGetViewModel.Employees = await appDbContext.Employees.ToListAsync();
+            reportGetViewModel.Worksyss = await appDbContext.Worksyss.ToListAsync();
+            reportGetViewModel.Departs = await appDbContext.Departs.ToListAsync();
+            reportGetViewModel.Secs = await appDbContext.Secs.ToListAsync();
+
+            return reportGetViewModel;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿@page "/report"
 @using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Buttons
 
 <div class="container bg-white rounded border p-3">
     <div class="row">
@@ -16,7 +17,7 @@
                         </label>
                     </div>
                     <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
-                        <SfComboBox TValue="int" TItem="@Employee" Placeholder="Select an Employee" Value="ReportVM.Employee.Id" DataSource="@Employees">
+                        <SfComboBox TValue="int" TItem="@Employee" Placeholder="Select an Employee" Value="ReportVM.Employee.Id" DataSource=@ReportGetViewModel.Employees>
                             <DropDownListEvents TValue="int" ValueChange="EmpOnChange"></DropDownListEvents>
                             <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
                         </SfComboBox>
@@ -54,21 +55,10 @@
                         </label>
                     </div>
                     <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
-                        <SfComboBox Value="@ReportVM.Employee.WorksysId" TValue="int?" TItem="DropDowenIntModel" Placeholder="Select a System" Query="@Query">
-                            <SfDataManager Url=@(appParam.APIUrl + "/api/worksys/drop")
-                                           Adaptor="Adaptors.WebApiAdaptor"
-                                           CrossDomain=true>
-                            </SfDataManager>
+                        <SfComboBox TValue="int" TItem="@Worksys" Placeholder="Select a System" Value="ReportVM.Worksys.Id" DataSource=@ReportGetViewModel.Worksyss>
+                            <DropDownListEvents TValue="int" ValueChange="WorkSysOnChange"></DropDownListEvents>
                             <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
-
-                            <ComboBoxTemplates TItem="DropDowenIntModel">
-                                <NoRecordsTemplate>
-                                    <span class='norecord'> NO DATA AVAILABLE</span>
-                                </NoRecordsTemplate>
-                            </ComboBoxTemplates>
-
                         </SfComboBox>
-                        <ValidationMessage For="@(() => ReportVM.Employee.WorksysId)" />
                     </div>
                 </div>
                 <div class="row mt-1">
@@ -135,23 +125,111 @@
                 </div>
             </div>
         </div>
+        <SfButton Content="Print" OnClick="PrintContent"></SfButton>
     </EditForm>
 </div>
 
 <div class="container">
-    @if (ReportVM.IOs == null)
+    @if (bol_Actions)
     {
-        <p>Loading ...</p>
+        @if (ReportVM.IOs == null)
+        {
+            <p>Loading ...</p>
+        }
+        else
+        {
+            <SfGrid DataSource="@ReportVM.IOs" AllowPaging="true" AllowSorting="true">
+                <GridPageSettings PageSize="100" />
+                <GridColumns>
+                    <GridColumn Field="TTime" HeaderText="Time" Width="200" />
+                    <GridColumn Field="DeviceNumber" HeaderText="Device" Width="200" />
+                </GridColumns>
+            </SfGrid>
+        }
     }
     else
     {
-        <SfGrid DataSource="@ReportVM.IOs" AllowPaging="true" AllowSorting="true">
-            <GridPageSettings PageSize="100" />
-            <GridColumns>
-                <GridColumn Field="TTime" HeaderText="Time" Width="200" />
-                <GridColumn Field="DeviceNumber" HeaderText="Device" Width="200" />
-            </GridColumns>
-        </SfGrid>
+        @if (attendanceReportViewModels == null)
+        {
+            <p>Loading ...</p>
+        }
+        else
+        {
+
+            <SfGrid @ref="DefaultGrid" DataSource="@attendanceReportViewModels" AllowPaging="true" AllowSorting="true">
+                <GridEvents QueryCellInfo="CustomizeCell" TValue="AttendanceReportViewModel"></GridEvents>
+                <GridPageSettings PageSize="100" />
+                <GridColumns>
+                    @if (ReportGetViewModel.AttReportSet.Date)
+                    {<GridColumn Field="Date" HeaderText=@LCS.Keys["Date"] Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Day)
+                    {<GridColumn Field="Day" HeaderText=@LCS.Keys["Day"] Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Attend1)
+                    {<GridColumn Field="Attend1" HeaderText=@LCS.Keys["Attend1"] Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.EarlyAttend1)
+                    {<GridColumn Field="EarlyAttend1" HeaderText=@LCS.Keys["Early Attend1"] Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Late1)
+                    {<GridColumn Field="Late1" HeaderText=@LCS.Keys["Late1"] Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Depart1)
+                    {<GridColumn Field="Depart1" HeaderText=@LCS.Keys["Depart1"] Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.EarlyDepart1)
+                    {<GridColumn Field="EarlyDepart1" HeaderText=@LCS.Keys["Early Depart1"] Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Bonus1)
+                    {<GridColumn Field="Bonus1" HeaderText=@LCS.Keys["Bonus1"] Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Shift1)
+                    {<GridColumn Field="Shift1" HeaderText=@LCS.Keys["Shift1"] Width="100" />}
+
+
+                    @if (ReportGetViewModel.AttReportSet.Attend2)
+                    {<GridColumn Field="Attend2" HeaderText="Attend2" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.EarlyAttend2)
+                    {<GridColumn Field="EarlyAttend2" HeaderText="Early Attend2" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Late2)
+                    {<GridColumn Field="Late2" HeaderText="Late2" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Depart2)
+                    {<GridColumn Field="Depart2" HeaderText="Depart2" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.EarlyDepart2)
+                    {<GridColumn Field="EarlyDepart2" HeaderText="Early Depart2" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Bonus2)
+                    {<GridColumn Field="Bonus2" HeaderText="Bonus2" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Shift2)
+                    {<GridColumn Field="Shift2" HeaderText="Shift2" Width="100" />}
+
+                    @if (ReportGetViewModel.AttReportSet.Early)
+                    {<GridColumn Field="Early" HeaderText="Early" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Late)
+                    {<GridColumn Field="Late" HeaderText="Late" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.EarlyDepart)
+                    {<GridColumn Field="EarlyDepart" HeaderText="Early Depart" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Bonus)
+                    {<GridColumn Field="Bonus" HeaderText="Bonus" Width="100" />}
+
+                    @if (ReportGetViewModel.AttReportSet.TotalTime)
+                    {<GridColumn Field="TotalTime" HeaderText="Total Time" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.TotalSubtract)
+                    {<GridColumn Field="TotalSubtract" HeaderText="Total Subtract" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.TotalSupplement)
+                    {<GridColumn Field="TotalSupplement" HeaderText="Total Supplement" Width="100" />}
+
+                    @if (ReportGetViewModel.AttReportSet.TotalHours)
+                    {<GridColumn Field="TotalHours" HeaderText="Total Hours" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Holiday)
+                    {<GridColumn Field="Holiday" HeaderText="Holiday" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Absent)
+                    {<GridColumn Field="Absent" HeaderText="Absent" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.AttendDevice)
+                    {<GridColumn Field="AttendDevice" HeaderText="Attend Device" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.DepartDevice)
+                    {<GridColumn Field="DepartDevice" HeaderText="Depart Device" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.Worksys)
+                    {<GridColumn Field="Worksys" HeaderText="Attendance System" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.BonusType)
+                    {<GridColumn Field="BonusType" HeaderText="Bonus Type" Width="100" />}
+                    @if (ReportGetViewModel.AttReportSet.UpdatedActions)
+                    {<GridColumn Field="UpdatedActions" HeaderText="Updated Actions" Width="100" />}
+                </GridColumns>
+            </SfGrid>
+        }
     }
 </div>
 
@@ -159,45 +237,191 @@
 
 @code
 {
-    [Inject] public IEmployeeService EmployeeService { get; set; }
+    [Inject] public ILanguageContainerService LCS { get; set; }
     [Inject] public IReportService ReportService { get; set; }
 
-
+    private SfGrid<AttendanceReportViewModel> DefaultGrid;
     public Query Query = new Query();
     [CascadingParameter] public MainLayout.AppParam appParam { get; set; }
+    ReportGetViewModel ReportGetViewModel = new ReportGetViewModel();
     ReportViewModel ReportVM { get; set; } = new ReportViewModel();
     List<AttendanceReportViewModel> attendanceReportViewModels = new List<AttendanceReportViewModel>();
 
-    List<Employee> Employees = new List<Employee>();
-
-
+    public bool bol_Actions { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Employees = (await EmployeeService.GetEmployees()).ToList();
-        ReportVM.Employee = Employees.FirstOrDefault(x => x.Id == 1);
+        ReportGetViewModel = await ReportService.GetReportGetViewModel();
+
+        ReportVM.Employee = ReportGetViewModel.Employees.FirstOrDefault(x => x.Id == 1);
+        ReportVM.Worksys = ReportGetViewModel.Worksyss.FirstOrDefault(x => x.Id == ReportVM.Employee.WorksysId);
+    }
+
+    void SetLang(string cultureCode)
+    {
+        LCS.SetLanguage(System.Globalization.CultureInfo.GetCultureInfo(cultureCode));
     }
 
     void EmpOnChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int> args)
     {
-        ReportVM.Employee = Employees.FirstOrDefault(x => x.Id == args.Value);
-        ReportVM.Worksys = new Worksys { Id = 1 };
+        ReportVM.Employee = ReportGetViewModel.Employees.FirstOrDefault(x => x.Id == args.Value);
+        ReportVM.Worksys = ReportGetViewModel.Worksyss.FirstOrDefault(x => x.Id == ReportVM.Employee.WorksysId);
+    }
+    void WorkSysOnChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int> args)
+    {
+        ReportVM.Worksys = ReportGetViewModel.Worksyss.FirstOrDefault(x => x.Id == ReportVM.Employee.WorksysId);
     }
 
-    async Task AttReport()
-    {
-        attendanceReportViewModels = await ReportService.GetAttendanceReport(ReportVM);
-    }
     async Task ActionReport()
     {
+        bol_Actions = true;
         ReportVM = await ReportService.GetReportViewModel(ReportVM);
     }
+    async Task AttReport()
+    {
+        bol_Actions = false;
+        attendanceReportViewModels = await ReportService.GetAttendanceReport(ReportVM);
+    }
+
+    public void CustomizeCell(QueryCellInfoEventArgs<AttendanceReportViewModel> args)
+    {
+        if (args.Column.Field == "EarlyAttend1")
+        {
+            if (!string.IsNullOrEmpty(args.Data.EarlyAttend1))
+            {
+                args.Cell.AddClass(new string[] { "green" });
+            }
+        }
+        if (args.Column.Field == "Late1")
+        {
+            if (!string.IsNullOrEmpty(args.Data.Late1))
+            {
+                args.Cell.AddClass(new string[] { "red" });
+            }
+        }
+        if (args.Column.Field == "EarlyDepart1")
+        {
+            if (!string.IsNullOrEmpty(args.Data.EarlyDepart1))
+            {
+                args.Cell.AddClass(new string[] { "red" });
+            }
+        }
+        if (args.Column.Field == "Bonus1")
+        {
+            if (!string.IsNullOrEmpty(args.Data.Bonus1))
+            {
+                args.Cell.AddClass(new string[] { "green" });
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////////
+        if (args.Column.Field == "EarlyAttend2")
+        {
+            if (!string.IsNullOrEmpty(args.Data.EarlyAttend2))
+            {
+                args.Cell.AddClass(new string[] { "green" });
+            }
+        }
+        if (args.Column.Field == "Late2")
+        {
+            if (!string.IsNullOrEmpty(args.Data.Late2))
+            {
+                args.Cell.AddClass(new string[] { "red" });
+            }
+        }
+        if (args.Column.Field == "EarlyDepart2")
+        {
+            if (!string.IsNullOrEmpty(args.Data.EarlyDepart2))
+            {
+                args.Cell.AddClass(new string[] { "red" });
+            }
+        }
+        if (args.Column.Field == "Bonus2")
+        {
+            if (!string.IsNullOrEmpty(args.Data.Bonus2))
+            {
+                args.Cell.AddClass(new string[] { "green" });
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////////
+        if (args.Column.Field == "Early")
+        {
+            if (!string.IsNullOrEmpty(args.Data.Early))
+            {
+                args.Cell.AddClass(new string[] { "green" });
+            }
+        }
+        if (args.Column.Field == "Late")
+        {
+            if (!string.IsNullOrEmpty(args.Data.Late))
+            {
+                args.Cell.AddClass(new string[] { "red" });
+            }
+        }
+        if (args.Column.Field == "EarlyDepart")
+        {
+            if (!string.IsNullOrEmpty(args.Data.EarlyDepart))
+            {
+                args.Cell.AddClass(new string[] { "red" });
+            }
+        }
+        if (args.Column.Field == "Bonus")
+        {
+            if (!string.IsNullOrEmpty(args.Data.Bonus))
+            {
+                args.Cell.AddClass(new string[] { "green" });
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////////
+        if (args.Column.Field == "TotalSubtract")
+        {
+            if (!string.IsNullOrEmpty(args.Data.TotalSubtract))
+            {
+                args.Cell.AddClass(new string[] { "red" });
+            }
+        }
+        if (args.Column.Field == "TotalSupplement")
+        {
+            if (!string.IsNullOrEmpty(args.Data.TotalSupplement))
+            {
+                args.Cell.AddClass(new string[] { "green" });
+            }
+        }
+        /////////////////////////////////////////////////////////////////////////////
+        if (args.Column.Field == "Absent")
+        {
+            if (!string.IsNullOrEmpty(args.Data.Absent))
+            {
+                args.Cell.AddClass(new string[] { "red" });
+            }
+        }
+    }
+    public void PrintContent()
+    {
+        this.DefaultGrid.Print();
+    }
 }
+
 
 <style>
     #wrapper {
         max-width: 300px;
         margin: 0px auto;
         padding-top: 20px;
+    }
+
+    .green {
+        background-color: #D5F5E3;
+    }
+
+    .red {
+        background-color: #F9EBEA;
+    }
+    .e-grid .e-headercelldiv {
+        background-color: #F2F3F4;
+        font-size: 16px;
+    }
+
+    .e-grid .e-rowcell {
+        font-size: 14px;
     }
 </style>

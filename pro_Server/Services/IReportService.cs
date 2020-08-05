@@ -11,5 +11,6 @@ namespace pro_Server.Services
     {
         Task<List<AttendanceReportViewModel>> GetAttendanceReport(ReportViewModel reportViewModel);
         Task<ReportViewModel> GetReportViewModel(ReportViewModel reportViewModel);
+        Task<ReportGetViewModel> GetReportGetViewModel();
     }
 }

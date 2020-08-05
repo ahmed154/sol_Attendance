@@ -22,6 +22,24 @@ namespace pro_API.Controllers
             this.reportRepository = reportRepository;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<ReportGetViewModel>> Get()
+        {
+            try
+            {
+                var result = await reportRepository.GetReportGetViewModel();
+
+                if (result == null) return NotFound();
+
+                return result;
+            }
+            catch (DbUpdateException Ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    Ex.InnerException.Message);
+            }
+        }
+        [HttpPost]
         public async Task<ActionResult<ReportViewModel>> GetReportViewModel(ReportViewModel reportViewModel)
         {
             try

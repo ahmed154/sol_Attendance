@@ -1,4 +1,4 @@
-﻿using pro_Server.Models;
+﻿using pro_Models.Models;
 using System.Threading.Tasks;
 
 namespace pro_Server.Services

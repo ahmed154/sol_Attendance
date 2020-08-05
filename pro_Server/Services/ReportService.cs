@@ -36,7 +36,7 @@ namespace pro_Server.Services
         async Task<IEnumerable<DeviceViewModel>> GetDevices()
         {
             List<DeviceViewModel> deviceViewModels = new List<DeviceViewModel>();
-            var response = await httpService.Get<List<DeviceViewModel>>(url);
+            var response = await httpService.Get<List<DeviceViewModel>>("api/device");
 
             if (!response.Success)
             {
@@ -621,15 +621,18 @@ namespace pro_Server.Services
 
                 for (int p = 0; p < reportViewModel.IOs.Count; p++) // IO Loop2
                 {
+                    if (reportViewModel.IOs[p] == null)
+                    {
+                        continue;
+                    }
                     #region Preparing
-                    string io_day = ToDateTime(reportViewModel.IOs[p].TTime).ToString("dddd"); // íæã ÇáÍÑßÉ
+                    string io_day = Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString("dddd"); // íæã ÇáÍÑßÉ
 
 
-
-                    string x = ToDateTime(reportViewModel.IOs[p].TTime).ToString("yyyy-MM-dd"); // ÊÇÑíÎ ÇáÍÑßÉ
-                    DateTime m = ToDateTime(reportViewModel.IOs[p].TTime); // ÊÇÑíÎ ææÞÊ ÇáÍÑßÉ
+                    string x = Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString("yyyy-MM-dd"); // ÊÇÑíÎ ÇáÍÑßÉ
+                    DateTime m = Convert.ToDateTime(reportViewModel.IOs[p].TTime); // ÊÇÑíÎ ææÞÊ ÇáÍÑßÉ
                     int m_action = m.Hour;
-                    m_action = (ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? m_action : m_action + 24;
+                    m_action = (Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? m_action : m_action + 24;
 
                     int fs = Convert.ToDateTime(WS_start(io_day, reportViewModel.Worksys)).Hour;
                     int fe = Convert.ToDateTime(WS_end(io_day, reportViewModel.Worksys)).Hour;
@@ -638,7 +641,7 @@ namespace pro_Server.Services
 
                     if (m_action >= 24)
                     {
-                        string io_prevday = ToDateTime(reportViewModel.IOs[p].TTime).AddDays(-1).ToString("dddd"); // Çáíæã ÇáÓÇÈÞ
+                        string io_prevday = Convert.ToDateTime(reportViewModel.IOs[p].TTime).AddDays(-1).ToString("dddd"); // Çáíæã ÇáÓÇÈÞ
                         fs = Convert.ToDateTime(WS_start(io_prevday, reportViewModel.Worksys)).Hour;
                         fe = Convert.ToDateTime(WS_end(io_prevday, reportViewModel.Worksys)).Hour;
                         ss = Convert.ToDateTime(WS_start2(io_prevday, reportViewModel.Worksys)).Hour;
@@ -680,7 +683,7 @@ namespace pro_Server.Services
                         {
                             if (dt_att.Rows[i]["ÍÖæÑ ÏæÇã 1"].ToString() == "") // ÅÐÇ ßÇä áÇ íæÌÏ ÍÖæÑ
                             {
-                                dt_att.Rows[i]["ÍÖæÑ ÏæÇã 1"] = ToDateTime(reportViewModel.IOs[p].TTime).ToString(sh);
+                                dt_att.Rows[i]["ÍÖæÑ ÏæÇã 1"] = Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(sh);
 
                                 #region ÍÖæÑ ãÈßÑ æ ÊÃÎíÑ       
                                 string start1 = WS_start(io_day, reportViewModel.Worksys);
@@ -725,8 +728,8 @@ namespace pro_Server.Services
                             //if (dt_att.Rows[i]["ÍÖæÑ ÏæÇã 1"].ToString() == "") continue;
                             if (dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 1"].ToString() != "" && ignore_l1 == true) continue;
 
-                            string s = (ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
-                            dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 1"] = ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
+                            string s = (Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
+                            dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 1"] = Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
 
                             ignore_l1 = Convert.ToBoolean(reportViewModel.IOs[p].Priority);
 
@@ -771,10 +774,10 @@ namespace pro_Server.Services
                         #region ÍÖæÑ ÏæÇã 2
                         else if (reportViewModel.IOs[p].Event.ToString() == "0" && m_action >= Second_as && m_action <= Second_ae && x == y) // ÍÖæÑ ÏæÇã 2
                         {
-                            string s = (ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
+                            string s = (Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
                             if (dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"].ToString() == "") // ÅÐÇ ßÇä áÇ íæÌÏ ÍÖæÑ
                             {
-                                dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"] = ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
+                                dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"] = Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
 
                                 #region ÍÖæÑ ãÈßÑ æ ÊÃÎíÑ
                                 string start2 = WS_start2(io_day, reportViewModel.Worksys);
@@ -819,8 +822,8 @@ namespace pro_Server.Services
                             if (dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"].ToString() == "") continue;
                             if (dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 2"].ToString() != "" && ignore_l2 == true) continue;
 
-                            string s = (ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
-                            dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 2"] = ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
+                            string s = (Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
+                            dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 2"] = Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
 
                             ignore_l2 = Convert.ToBoolean(reportViewModel.IOs[p].Priority);
 
@@ -867,7 +870,7 @@ namespace pro_Server.Services
                         {
                             if (dt_att.Rows[i]["ÍÖæÑ ÏæÇã 1"].ToString() == "") // ÅÐÇ ßÇä áÇ íæÌÏ ÍÖæÑ
                             {
-                                dt_att.Rows[i]["ÍÖæÑ ÏæÇã 1"] = ToDateTime(reportViewModel.IOs[p].TTime).ToString(sh);
+                                dt_att.Rows[i]["ÍÖæÑ ÏæÇã 1"] = Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(sh);
 
                                 #region ÍÖæÑ ãÈßÑ æ ÊÃÎíÑ
                                 if (Fixed(io_day, reportViewModel.Worksys) == false) // ÅÐÇ ßÇä äÙÇã ËÇÈÊ
@@ -915,8 +918,8 @@ namespace pro_Server.Services
                             if (dt_att.Rows[i]["ÍÖæÑ ÏæÇã 1"].ToString() == "") continue;
                             if (dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 1"].ToString() != "" && ignore_l1 == true) continue;
 
-                            string s = (ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
-                            dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 1"] = ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
+                            string s = (Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
+                            dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 1"] = Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
 
                             ignore_l1 = Convert.ToBoolean(reportViewModel.IOs[p].Priority);
 
@@ -965,8 +968,8 @@ namespace pro_Server.Services
                         #region ÍÖæÑ ÏæÇã 2
                         else if (reportViewModel.IOs[p].Event.ToString() == "2" && x == y) // ÍÖæÑ ÏæÇã 2
                         {
-                            string s = (ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
-                            dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"] = (dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"].ToString() == "") ? ToDateTime(reportViewModel.IOs[p].TTime).ToString(s) : dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"].ToString();
+                            string s = (Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
+                            dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"] = (dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"].ToString() == "") ? Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(s) : dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"].ToString();
 
                             #region ÍÖæÑ ãÈßÑ æ ÊÃÎíÑ
                             string start2 = WS_start2(io_day, reportViewModel.Worksys);
@@ -1011,8 +1014,8 @@ namespace pro_Server.Services
                             if (dt_att.Rows[i]["ÍÖæÑ ÏæÇã 2"].ToString() == "") continue;
                             if (dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 2"].ToString() != "" && ignore_l2 == true) continue;
 
-                            string s = (ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
-                            dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 2"] = ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
+                            string s = (Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(sd) == y) ? sh : l;
+                            dt_att.Rows[i]["ÅäÕÑÇÝ ÏæÇã 2"] = Convert.ToDateTime(reportViewModel.IOs[p].TTime).ToString(s);
 
                             ignore_l2 = Convert.ToBoolean(reportViewModel.IOs[p].Priority);
 
@@ -1391,6 +1394,22 @@ namespace pro_Server.Services
                     });
             }
             return attendanceReportViewModels;
+        }
+
+        public async Task<ReportGetViewModel> GetReportGetViewModel()
+        {
+            ReportGetViewModel reportGetViewModel = new ReportGetViewModel();
+            var response = await httpService.Get<ReportGetViewModel>(url);
+
+            if (!response.Success)
+            {
+                reportGetViewModel.Exception = await response.GetBody();
+            }
+            else
+            {
+                reportGetViewModel = response.Response;
+            }
+            return reportGetViewModel;
         }
     }
 }

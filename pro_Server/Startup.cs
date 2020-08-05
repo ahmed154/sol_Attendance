@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using AKSoftware.Localization.MultiLanguages;
 using BlazorServerApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -35,6 +37,7 @@ namespace pro_Server
             services.AddTransient<ValidateHeaderHandler>();
             //services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             services.AddAuthorizationCore();
+            services.AddLanguageContainer(Assembly.GetExecutingAssembly());
             services.AddScoped<JWTAuthenticationStateProvider>();
             services.AddScoped<AuthenticationStateProvider, JWTAuthenticationStateProvider>(
                 provider => provider.GetRequiredService<JWTAuthenticationStateProvider>()

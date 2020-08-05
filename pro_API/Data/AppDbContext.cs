@@ -22,5 +22,6 @@ namespace pro_API.Data
         public DbSet<IO> IOs { get; set; }
         public DbSet<IOEdit> IOEdits { get; set; }
         public DbSet<Worksys> Worksyss { get; set; }
+        public DbSet<AttReportSet> AttReportSet { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using pro_Server.Models;
+using pro_Models.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
 using pro_Server.Services;
