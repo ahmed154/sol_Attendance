@@ -1395,7 +1395,6 @@ namespace pro_Server.Services
             }
             return attendanceReportViewModels;
         }
-
         public async Task<ReportGetViewModel> GetReportGetViewModel()
         {
             ReportGetViewModel reportGetViewModel = new ReportGetViewModel();

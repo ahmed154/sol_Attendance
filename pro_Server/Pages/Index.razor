@@ -1,6 +1,8 @@
 ﻿@page "/"
 @page "/index"
 
+
+
 <AuthorizeView>
     <Authorized>
         Welcome, @context.User.Identity.Name
@@ -9,3 +11,6 @@
         You are signed out !
     </NotAuthorized>
 </AuthorizeView>
+
+
+

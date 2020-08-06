@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using pro_Models.ViewModels;
 using pro_Server.Auth;
 using pro_Server.Handlers;
 using pro_Server.Helpers;
@@ -38,6 +39,7 @@ namespace pro_Server
             //services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             services.AddAuthorizationCore();
             services.AddLanguageContainer(Assembly.GetExecutingAssembly());
+            services.AddSingleton<PdfGenerate>();
             services.AddScoped<JWTAuthenticationStateProvider>();
             services.AddScoped<AuthenticationStateProvider, JWTAuthenticationStateProvider>(
                 provider => provider.GetRequiredService<JWTAuthenticationStateProvider>()

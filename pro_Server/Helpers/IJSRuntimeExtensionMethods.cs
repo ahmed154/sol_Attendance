@@ -32,7 +32,9 @@ namespace pro_Server.Helpers
         {
             return js.InvokeVoidAsync("ReloadPage");
         }
-
+        public static ValueTask<object> SaveAs(this IJSRuntime js, string fileName, byte[] data)
+            => js.InvokeAsync<object>("saveAsFile", fileName, Convert.ToBase64String(data));
+  
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///
 
