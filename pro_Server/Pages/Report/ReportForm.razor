@@ -1,0 +1,115 @@
+﻿@using Syncfusion.Blazor.Calendars
+
+
+<div class="container bg-white rounded border p-3">
+    <div class="row">
+        <span class="ml-3" style="font-size:18px; color:#8f8f8f;">Attendance Report</span>
+    </div>
+    <EditForm Model="ReportVM" Context="formContext">
+        <ObjectGraphDataAnnotationsValidator />
+
+        <div class="row mt-5">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            Employee
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfComboBox TValue="int" TItem="@Employee" Placeholder="Select an Employee" Value="ReportVM.Employee.Id" DataSource=@ReportGetViewModel.Employees>
+                            <DropDownListEvents TValue="int" ValueChange="EmpOnChange"></DropDownListEvents>
+                            <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
+                        </SfComboBox>
+
+                        <ValidationMessage For="@(() => ReportVM.Employee.Id)" />
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            From
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfDateTimePicker @bind-Value="ReportVM.FromDate" TValue="DateTime" Placeholder="Select a date and time"></SfDateTimePicker>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            To
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfDateTimePicker @bind-Value="ReportVM.ToDate" TValue="DateTime" Placeholder="Select a date and time"></SfDateTimePicker>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            System
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfComboBox TValue="int" TItem="@Worksys" Placeholder="Select a System" Value="ReportVM.Worksys.Id" DataSource=@ReportGetViewModel.Worksyss>
+                            <DropDownListEvents TValue="int" ValueChange="WorkSysOnChange"></DropDownListEvents>
+                            <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
+                        </SfComboBox>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            Department
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfComboBox TValue="int" TItem="@Depart" Placeholder="Select a Department" Value="ReportVM.Depart.Id" DataSource=@ReportGetViewModel.Departs>
+                            <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
+                        </SfComboBox>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                        <label class="lbl">
+                            Section
+                        </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8">
+                        <SfComboBox TValue="int" TItem="@Sec" Placeholder="Select a Section" Value="ReportVM.Sec.Id" DataSource=@ReportGetViewModel.Secs>
+                            <ComboBoxFieldSettings Text="Name" Value="Id"></ComboBoxFieldSettings>
+                        </SfComboBox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+
+    [Parameter] public ReportGetViewModel ReportGetViewModel { get; set; } = new ReportGetViewModel();
+    [Parameter] public ReportViewModel ReportVM { get; set; } = new ReportViewModel();
+    [Parameter] public List<AttendanceReportViewModel> attendanceReportViewModels { get; set; } = new List<AttendanceReportViewModel>();
+
+    [Inject] public IReportService ReportService { get; set; }
+    [Inject] public PdfGenerate PdfGenerate { get; set; }
+    [Inject] public IJSRuntime JSRuntime { get; set; }
+
+
+    void EmpOnChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int> args)
+    {
+        ReportVM.Employee = ReportGetViewModel.Employees.FirstOrDefault(x => x.Id == args.Value);
+        ReportVM.Worksys = ReportGetViewModel.Worksyss.FirstOrDefault(x => x.Id == ReportVM.Employee.WorksysId);
+        ReportVM.Depart = ReportGetViewModel.Departs.FirstOrDefault(x => x.Id == ReportVM.Employee.DepartId);
+        ReportVM.Sec = ReportGetViewModel.Secs.FirstOrDefault(x => x.Id == ReportVM.Employee.SecId);
+    }
+    void WorkSysOnChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<int> args)
+    {
+        ReportVM.Worksys = ReportGetViewModel.Worksyss.FirstOrDefault(x => x.Id == ReportVM.Employee.WorksysId);
+    }
+}

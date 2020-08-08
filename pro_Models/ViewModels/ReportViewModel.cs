@@ -11,6 +11,8 @@ namespace pro_Models.ViewModels
         [ValidateComplexType]
         public Employee Employee { get; set; } = new Employee();
         public Worksys Worksys { get; set; } = new Worksys();
+        public Depart Depart { get; set; } = new Depart();
+        public Sec Sec { get; set; } = new Sec();
         public DateTime FromDate { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
         public DateTime ToDate { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month), 23, 59, 59);
         public List<IO> IOs { get; set; } = new List<IO>(); 

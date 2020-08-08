@@ -1,44 +1,4 @@
-﻿@page "/report"
-@using Syncfusion.Blazor.Calendars
-@using Syncfusion.Blazor.Buttons
-
-
-<div class="container bg-white rounded border p-3">
-    <div class="pl-3">
-        <div class="row">
-            <span class="ml-3" style="font-size:18px; color:#8f8f8f;">Attendance Report</span>
-        </div>
-        <div class="row pt-4 ml-1">
-            <button @onclick="AttReport" class="btn btn-primary" style="background-color:#6372C4">
-                <i class="far fa-list-alt"></i> Attendance Report
-            </button>
-
-            <button @onclick="ActionReport" class="btn border ml-1">
-                <i class="fas fa-bars"></i> Actions Report
-            </button>
-
-            <Button @onclick="ExportToPDF" class="btn border ml-1"><i class="far fa-file-pdf"></i> Print</Button>
-
-        </div>
-    </div>
-</div>
-
-
-<ReportForm ReportGetViewModel="ReportGetViewModel"
-            ReportVM="ReportVM"
-            attendanceReportViewModels="attendanceReportViewModels">
-
-</ReportForm>
-
-@*<ReportGrid ReportVM="ReportVM"
-                ReportGetViewModel="ReportGetViewModel"
-                attendanceReportViewModels="attendanceReportViewModels"
-                DefaultGrid="DefaultGrid"
-                bol_Actions="bol_Actions">
-    </ReportGrid>*@
-
-
-<div class="container">
+﻿<div class="container">
     @if (bol_Actions)
     {
         @if (ReportVM.IOs == null)
@@ -64,6 +24,9 @@
         }
         else
         {
+
+<Button @onclick="ExportToPDF" class="btn border">ExportToPDF</Button>
+
             <SfGrid @ref="DefaultGrid" DataSource="@attendanceReportViewModels" AllowPaging="true" AllowSorting="true">
                 <GridEvents QueryCellInfo="CustomizeCell" TValue="AttendanceReportViewModel"></GridEvents>
                 <GridPageSettings PageSize="100" />
@@ -141,53 +104,19 @@
     }
 </div>
 
-@code
-{
+
+@code {
+
+    [Parameter] public ReportViewModel ReportVM { get; set; } = new ReportViewModel();
+    [Parameter] public ReportGetViewModel ReportGetViewModel { get; set; } = new ReportGetViewModel();
+    [Parameter] public List<AttendanceReportViewModel> attendanceReportViewModels { get; set; } = new List<AttendanceReportViewModel>();
+    [Parameter] public SfGrid<AttendanceReportViewModel> DefaultGrid { get; set; } = new SfGrid<AttendanceReportViewModel>();
+    [Parameter] public bool bol_Actions { get; set; }
+
     [Inject] public ILanguageContainerService LCS { get; set; }
-    [Inject] public IReportService ReportService { get; set; }
     [Inject] public PdfGenerate PdfGenerate { get; set; }
     [Inject] public IJSRuntime JSRuntime { get; set; }
 
-    ReportGetViewModel ReportGetViewModel = new ReportGetViewModel();
-    ReportViewModel ReportVM { get; set; } = new ReportViewModel();
-    List<AttendanceReportViewModel> attendanceReportViewModels = new List<AttendanceReportViewModel>();
-
-
-    private SfGrid<AttendanceReportViewModel> DefaultGrid;
-    public Query Query = new Query();
-    [CascadingParameter] public MainLayout.AppParam appParam { get; set; }
-
-    public bool bol_Actions { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        ReportGetViewModel = await ReportService.GetReportGetViewModel();
-
-        ReportVM.Employee = ReportGetViewModel.Employees.FirstOrDefault(x => x.Id == 1);
-        ReportVM.Worksys = ReportGetViewModel.Worksyss.FirstOrDefault(x => x.Id == ReportVM.Employee.WorksysId);
-        ReportVM.Depart = ReportGetViewModel.Departs.FirstOrDefault(x => x.Id == ReportVM.Employee.DepartId);
-        ReportVM.Sec = ReportGetViewModel.Secs.FirstOrDefault(x => x.Id == ReportVM.Employee.SecId);
-
-        StateHasChanged();
-    }
-
-    async Task ActionReport()
-    {
-        bol_Actions = true;
-        ReportVM = await ReportService.GetReportViewModel(ReportVM);
-    }
-    async Task AttReport()
-    {
-        bol_Actions = false;
-        attendanceReportViewModels = await ReportService.GetAttendanceReport(ReportVM);
-    }
-    async Task ExportToPDF()
-    {
-        using (System.IO.MemoryStream ms = await PdfGenerate.CreatePDF(DefaultGrid, ReportGetViewModel.AttReportSet, ReportVM))
-        {
-            await JSRuntime.SaveAs("Print.pdf", ms.ToArray());
-        }
-    }
 
     public void CustomizeCell(QueryCellInfoEventArgs<AttendanceReportViewModel> args)
     {
@@ -299,6 +228,14 @@
             {
                 args.Cell.AddClass(new string[] { "red" });
             }
+        }
+    }
+
+    async Task ExportToPDF()
+    {
+        using (System.IO.MemoryStream ms = await PdfGenerate.CreatePDF(DefaultGrid, ReportGetViewModel.AttReportSet, ReportVM))
+        {
+            await JSRuntime.SaveAs("Print.pdf", ms.ToArray());
         }
     }
 
